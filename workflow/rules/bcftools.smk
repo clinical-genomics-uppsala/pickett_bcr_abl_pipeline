@@ -28,8 +28,6 @@ rule bcftools_reheader:
         time=config.get("bcftools_reheader", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_reheader", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: Rename sample in snv_indels/pisces/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.bad_name.vcf"
     shell:

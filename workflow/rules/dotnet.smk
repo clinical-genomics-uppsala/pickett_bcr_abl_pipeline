@@ -32,8 +32,6 @@ rule dotnet_pisces:
         time=config.get("dotnet_pisces", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("dotnet_pisces", {}).get("container", config["default_container"])
-    conda:
-        "../envs/dotnet_pisces.yaml"
     message:
         "{rule}: Call variants using Illumina Pisces on alignment/samtools_extract_reads/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.bam"
     shell:

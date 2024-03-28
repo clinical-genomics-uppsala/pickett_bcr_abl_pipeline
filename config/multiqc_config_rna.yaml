@@ -1,4 +1,4 @@
-decimalPoint_format: ','
+decimalPoint_format: ","
 
 custom_content:
   order:
@@ -8,7 +8,6 @@ custom_content:
     - STAR
     - rseqc
     - samtools
-
 
 table_columns_visible:
   FastQC:

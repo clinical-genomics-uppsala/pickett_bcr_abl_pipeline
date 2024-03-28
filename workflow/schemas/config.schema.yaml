@@ -6,14 +6,314 @@ properties:
     type: string
   units:
     type: string
+  output:
+    type: string
+    description: yaml file containing results files
   resources:
     type: string
     description: Path to resources.yaml file
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+
+  reference:
+    type: object
+    properties:
+      genome_dir:
+        type: string
+        description: required by alignment module but not used
+      fasta:
+        type: string
+        description: fasta reference file
+      fai: 
+        type: string
+        description: fasta reference genome_index
+      design_bed:
+        type: string
+        description: bedfile of capture design
+      background:
+        type: string
+        description: background tsv file created by background pipeline
+      skip_chrs:
+        type: array
+        description: reference sequences that should be excluded from analysis
+        items:
+          type: string
+    required:
+     - fasta
+     - fai
+     - design_bed
+     - background
+  
+  arriba:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing arriba
+      assembly:
+        type: string
+        description: path to assembly/fasta reference
+      blacklist:
+        type: string
+        description: path to tsv blacklist database specific to arriba version and ref genome
+      gtf:
+        type: string
+        description: path to reference gtf file
+      extra:
+        type: string
+        description: extra varibels with e.g protein domains (-p) and known fusions (s)
+    required:
+      - container
+      - assembly
+      - blacklist
+      - gtf
+  
+  arriba_draw_fusion:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing arriba
+      cytobands:
+        type: string
+        description: path to cytoband tsv file
+      gtf:
+        type: string
+        description: path to reference gtf file
+      protein_domains:
+        type: string
+        description: path to protein domains gff3 file
+    required:
+      - container
+      - cytobands
+      - gtf
+      - protein_domains
+  
+  convert_pdf:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing convert
+    required:
+      - container
+  
+  dotnet_pisces:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing pisces
+    required:
+      - container
+
+  fastp_pe:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing fastp
+      extra:
+        type: string
+        description: any extra parameters wanted
+    required:
+      - container
+  
+  fastqc:
+    type: object
+    properties:
+      container:
+          type: string
+          description: name or path to container containing fastqc
+    required:
+      - container
+  
+  fusioncatcher:
+    description: not used by pipeline but set as required in fusion module, therefor set as required here as well
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing convert
+      genome_path:
+        type: string
+        description: path to folder
+    required:
+      - container
+      - genome_path
+
+  mosdepth_bed:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing convert
+      design_bed:
+        type: string
+        description: path to bedfile used for depth calculations
+    required:
+      - container
+      - design_bed
+  
+  multiqc:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing the multiqc executable
+        format: uri-reference
+      reports:
+        type: object
+        description: logs that should be created into multiqc-reports
+        properties:
+          RNA:
+            type: object
+            properties:
+              config:
+                type: string
+                description: path to multiqc config file
+                format: uri-reference
+              included_unit_types:
+                type: array
+                description: unit types that should be included
+                items:
+                  type: string
+                  enum:
+                    - R
+              qc_files:
+                type: array
+                description: log files to include. Variables from the samples and units files can be used in the file names.
+                items:
+                  type: string
+                  format: uri-reference
+            required:
+              - included_unit_types
+              - qc_files
+        required:
+          - RNA
+    required:
+      - container
+      - reports
+  
+  rseqc_gene_body_coverage:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing the rseqc
+      bed:
+        type: string
+        description: bedfile to calculate gene body coverage 
+    required:
+      - container
+      - bed
+  
+  rseqc_inner_distance:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing the rseqc
+      bed:
+        type: string
+        description: bedfile to calculate inner distance
+    required:
+      - container
+      - bed
+  
+  samples_order_for_multiqc:
+    type: object
+    properties:
+      sample_sheet:
+        type: string
+        description: samples sheet from illumina machine used to order samples in multiqc reports
+    required:
+      - sample_sheet
+  
+  star:
+    type: object
+    properties:
+      container:
+        type: string
+        description: name or path to container containing the star aligner
+      genome_index:
+        type: string
+        description: path to genome index folder 
+      extra: 
+        type: string
+        description: extra parameters used while running star aligner
+    required:
+      - container
+      - genome_index
+  
+star_fusion:
+  type: object
+  properties:
+    container:
+        type: string
+        description: name or path to container containing the star fusion
+    genome_path:
+      type: string
+      description: path to genome build directory
+  required:
+    - container
+    - genome_path
+
+summary_report:
+  type: object
+  description: parameters for summary xlsx-report
+  properties:
+    branford: 
+      type: string
+      description: bedfile with branford positions
+  required:
+    - branford
+
+trimmer_software:
+  type: string
+  description: which fastq trimmer to use
+
+vt_decompose:
+  type: object
+  properties:
+    container:
+        type: string
+        description: name or path to container containing vt
+  required:
+    - container
+
+vt_normalize:
+  type: object
+  properties:
+    container:
+        type: string
+        description: name or path to container containing vt
+  required:
+    - container
+
 required:
   - samples
   - units
   - resources
   - default_container
+  - output
+  - reference
+  - arriba
+  - arriba_draw_fusion
+  - convert_pdf
+  - dotnet_pisces
+  - fastp_pe
+  - fastqc
+  - fusioncatcher
+  - mosdepth_bed
+  - multiqc
+  - rseqc_gene_body_coverage
+  - rseqc_inner_distance
+  - sample_order_for_multiqc
+  - star
+  - star_fusion
+  - summary_report
+  - trimmer_software
+  - vt_decompose
+  - vt_normalize

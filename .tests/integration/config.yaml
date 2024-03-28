@@ -1,118 +1,52 @@
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
-
-default_container: "docker://hydragenetics/common:0.1.8"
+output: "../../config/output_files.yaml"
 
 reference:
   fasta: "references/ref.fasta"
   fai: "references/ref.fasta.fai"
   design_bed: "references/bedfile.bed"
-  skip_chrs:
-      - "chr1"
-      - "chr2"
-      - "chr3"
-      - "chr4"
-      - "chr5"
-      - "chr6"
-      - "chr7"
-      - "chr8"
-      - "chr10"
-      - "chr11"
-      - "chr12"
-      - "chr13"
-      - "chr14"
-      - "chr15"
-      - "chr16"
-      - "chr17"
-      - "chr18"
-      - "chr19"
-      - "chr20"
-      - "chr21"
-      - "chrX"
-      - "chrY"
-      - "chrM"
+  background: "references/background.tsv"
 
 arriba:
-  container: "docker://hydragenetics/arriba:2.3.0"
   assembly: "references/ref.fasta"
   blacklist: "references/blacklist_arriba.tsv.gz"
   gtf: "references/ref.gtf"
 
 arriba_draw_fusion:
-  container: "docker://hydragenetics/arriba:2.3.0"
   cytobands: "references/cytobands.tsv"
   gtf: "references/ref.gtf"
   protein_domains: "references/protein_domain.gff3"
-
-convert_pdf:
-  container: "docker://dpokidov/imagemagick:7.1.0-47-ubuntu"
 
 dotnet_pisces:
   bed_files:
     branford: "references/bedfile.bed"
 
-fastp_pe:
-   container: "docker://hydragenetics/fastp:0.20.1"
-   extra: "-x "
-
-fastqc:
-  container: "docker://hydragenetics/fastqc:0.11.9"
 
 fusioncatcher:
-  container: "docker://hydragenetics/fusioncatcher:1.33"
   genome_path: "references/"
 
 mosdepth_bed:
-  container: "docker://hydragenetics/mosdepth:0.3.2"
   design_bed: "references/bedfile.bed"
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.11"
   reports:
     RNA:
       config: "../../config/multiqc_config_rna.yaml"
-      included_unit_types: ['R']
-      qc_files:
-        - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
-        - "prealignment/fastp_pe/{sample}_{flowcell}_{lane}_{barcode}_{type}_fastp.json"
-        - "alignment/star/{sample}_{type}.Log.final.out"
-        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.global.dist.txt"
-        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.region.dist.txt"
-        - "qc/mosdepth_bed/{sample}_{type}.mosdepth.summary.txt"
-        - "qc/mosdepth_bed/{sample}_{type}.regions.bed.gz"
-        - "qc/mosdepth_bed/{sample}_{type}.regions.bed.gz.csi"
-        - "qc/samtools_stats/{sample}_{type}.samtools-stats.txt"
-        - "qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"
-        - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
 
 rseqc_gene_body_coverage:
   bed: "references/bedfile.bed"
-  container: "docker://hydragenetics/rseqc:4.0.0"
 
 rseqc_inner_distance:
   bed: "references/bedfile.bed"
-  container: "docker://hydragenetics/rseqc:4.0.0"
-
-sample_order_for_multiqc:
-  sample_sheet: "SampleSheet.csv"
 
 star:
-  container: "docker://hydragenetics/star:2.7.10a"
   genome_index: "references/"
   extra: "--outSAMmapqUnique 60 --quantMode GeneCounts --sjdbGTFfile references/ref.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
 
 star_fusion:
-  container: "docker://hydragenetics/star-fusion:1.10.1"
   genome_path: "references/"
 
 summary_report:
   branford: "references/bedfile.bed"
-
-trimmer_software: "fastp_pe"
-
-vt_decompose:
-  container: "docker://hydragenetics/vt:2015.11.10"
-
-vt_normalize:
-  container: "docker://hydragenetics/vt:2015.11.10"

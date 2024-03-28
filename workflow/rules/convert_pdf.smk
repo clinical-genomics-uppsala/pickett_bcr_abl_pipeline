@@ -27,8 +27,6 @@ rule convert_pdf:
         time=config.get("convert_pdf", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("convert_pdf", {}).get("container", config["default_container"])
-    conda:
-        "../envs/convert_pdf.yaml"
     message:
         "{rule}: Convert first page of {input.pdf} to {output.jpg}"
     shell:

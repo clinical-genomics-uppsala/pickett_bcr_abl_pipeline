@@ -3,7 +3,13 @@ __copyright__ = "Copyright 2022, Arielle R. Munters"
 __email__ = "arielle.munters@scilifelab.uu.se"
 __license__ = "GPL-3"
 
+import itertools
+import numpy as np
 import pandas as pd
+import pathlib
+import re
+import yaml
+from datetime import datetime
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
@@ -12,19 +18,39 @@ from hydra_genetics.utils.samples import *
 from hydra_genetics.utils.units import *
 from hydra_genetics import min_version as hydra_min_version
 
-hydra_min_version("0.15.0")
-min_version("6.8.0")
-
-### Set and validate config file
+hydra_min_version("1.12.0")
+min_version("7.8.0")
 
 
-configfile: "config.yaml"
+include: "results.smk"
 
 
-validate(config, schema="../schemas/config.schema.yaml")
+#### Set up and validate config file
+
+if not workflow.overwrite_configfiles:
+    sys.exit("At least one config file must be passed using --configfile/--configfiles, by command line or a profile!")
+
+try:
+    validate(config, schema="../schemas/config.schema.yaml")
+except WorkflowError as we:
+    # Probably a validation error, but the original exception in lost in
+    # snakemake. Pull out the most relevant information instead of a potentially
+    # *very* long error message.
+    if not we.args[0].lower().startswith("error validating config file"):
+        raise
+    error_msg = "\n".join(we.args[0].splitlines()[:2])
+    parent_rule_ = we.args[0].splitlines()[3].split()[-1]
+    if parent_rule_ == "schema:":
+        sys.exit(error_msg)
+    else:
+        schema_hiearachy = parent_rule_.split()[-1]
+        schema_section = ".".join(re.findall(r"\['([^']+)'\]", schema_hiearachy)[1::2])
+        sys.exit(f"{error_msg} in {schema_section}")
+
+#### Set up and validate resources
+
 config = load_resources(config, config["resources"])
 validate(config, schema="../schemas/resources.schema.yaml")
-
 
 ### Read and validate samples file
 
@@ -39,6 +65,12 @@ units = (
     .sort_index()
 )
 validate(units, schema="../schemas/units.schema.yaml")
+
+
+### Read and validate output
+with open(config["output"], "r") as f:
+    output_spec = yaml.safe_load(f.read())
+    validate(output_spec, schema="../schemas/output_files.schema.yaml", set_default=True)
 
 
 def generate_read_group_star(wildcards):
@@ -57,29 +89,4 @@ wildcard_constraints:
     type="N|T|R",
 
 
-def compile_output_list(wildcards):
-    output_files = ["Results/MultiQC_R.html"]
-    output_files.append(
-        [
-            "Results/%s_%s/%s_%s.%s" % (sample, type, sample, type, suffix)
-            for sample in get_samples(samples)
-            for type in get_unit_types(units, sample)
-            for suffix in [
-                "bam",
-                "bam.bai",
-                "arriba.fusions.tsv",
-                "arriba.pdf",
-                "normalized.sorted.vcf.gz",
-                "normalized.sorted.vcf.gz.tbi",
-                "config.yaml",
-            ]
-        ]
-    )
-    output_files.append(
-        [
-            "Results/%s_%s_summary.xlsx" % (sample, type)
-            for sample in get_samples(samples)
-            for type in get_unit_types(units, sample)
-        ]
-    )
-    return output_files
+generate_copy_rules(output_spec)

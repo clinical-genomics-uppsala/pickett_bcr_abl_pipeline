@@ -6,12 +6,14 @@ __license__ = "GPL-3"
 
 rule summary_report:
     input:
-        vcf="snv_indels/pisces/{sample}_{type}.normalized.sorted.vcf.gz",
+        vcf="snv_indels/pisces/{sample}_{type}.normalized.sorted.background_annotated.vcf.gz",
+        tbi="snv_indels/pisces/{sample}_{type}.normalized.sorted.background_annotated.vcf.gz.tbi",
         branford=config["summary_report"]["branford"],
         bed=config["reference"]["design_bed"],
         mosdepth_regions="qc/mosdepth_bed/{sample}_{type}.regions.bed.gz",
         arriba_tsv="fusions/arriba/{sample}_{type}.fusions.tsv",
         jpg="fusions/arriba_draw_fusion/{sample}_{type}_page1.jpg",
+        background=config["reference"]["background"],
     output:
         xlsx="Results/{sample}_{type}_summary.xlsx",
     params:
@@ -32,8 +34,6 @@ rule summary_report:
         time=config.get("summary_report", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("summary_report", {}).get("container", config["default_container"])
-    conda:
-        "../envs/summary_report.yaml"
     message:
         "{rule}: Summarize {input.vcf} results in {output.xlsx}"
     script:

@@ -1,0 +1,38 @@
+directory: ./Results
+
+files:
+  - name: MultiQC
+    input: "qc/multiqc/multiqc_RNA.html"
+    output: "MultiQC_R.html"
+
+  - name: bam file
+    input: "alignment/star/{sample}_R.bam"
+    output: "{sample}_R/{sample}_R.bam"
+
+  - name: bai file
+    input: null
+    output: "{sample}_R/{sample}_R.bam.bai"
+
+  - name: vcf file
+    input: "snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf.gz"
+    output: "{sample}_R/{sample}_R.normalized.sorted.background_annotated.vcf.gz"
+
+  - name: tbi file
+    input: null
+    output: "{sample}_R/{sample}_R.normalized.sorted.background_annotated.vcf.gz.tbi"
+
+  - name: arriba tsv
+    input: "fusions/arriba/{sample}_R.fusions.tsv"
+    output: "{sample}_R/{sample}_R.arriba.fusions.tsv"
+
+  - name: arriba pdf
+    input: "fusions/arriba_draw_fusion/{sample}_R.pdf"
+    output: "{sample}_R/{sample}_R.arriba.pdf"
+
+  - name: config file
+    input: config.yaml
+    output: "{sample}_R/{sample}_R.config.yaml"
+
+  - name: xlsx rapport
+    input: null
+    output: "{sample}_{type}_summary.xlsx"
