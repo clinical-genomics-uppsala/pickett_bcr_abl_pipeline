@@ -1,0 +1,50 @@
+---
+
+default_resources:
+  threads: 1
+  time: "12:00:00"
+  mem_mb: 6144
+  mem_per_cpu: 6144
+  partition: core
+
+arriba:
+  mem_mb: 30720
+  threads: 6
+  time: "72:00:00"
+
+dotnet_pisces:
+  threads: 12
+
+fastp_pe:
+  mem_mb: 49152
+  threads: 16
+
+fastqc:
+  mem_mb: 12288
+  threads: 2
+
+fusioncatcher:
+  mem_mb: 61440
+  threads: 12
+  time: "96:00:00"
+
+mosdepth_bed:
+  mem_mb: 24576
+  threads: 6
+
+sortmerna:
+  mem_mb: 49152
+  threads: 12
+
+spring:
+  mem_mb: 49152
+  threads: 24
+
+star:
+  mem_mb: 49152
+  threads: 24
+
+star_fusion:
+  mem_mb: 30720
+  threads: 24
+  time: "72:00:00"

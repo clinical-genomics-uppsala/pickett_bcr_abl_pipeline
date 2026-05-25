@@ -28,11 +28,7 @@ rule all:
 
 module annotation:
     snakefile:
-        github(
-            "hydra-genetics/annotation",
-            path="workflow/Snakefile",
-            tag="b25e8ea",
-        )
+        get_module_snakefile(config, "hydra-genetics/annotation", path="workflow/Snakefile", tag=config["modules"]["annotation"])
     config:
         config
 
@@ -58,11 +54,7 @@ use rule background_annotation from annotation as annotation_background_annotati
 
 module prealignment:
     snakefile:
-        github(
-            "hydra-genetics/prealignment",
-            path="workflow/Snakefile",
-            tag="v1.2.0",
-        )
+        get_module_snakefile(config, "hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"])
     config:
         config
 
@@ -72,14 +64,9 @@ use rule * from prealignment as prealignment_*
 
 module alignment:
     snakefile:
-        github(
-            "hydra-genetics/alignment",
-            path="workflow/Snakefile",
-            tag="v0.6.0",
-        )
+        get_module_snakefile(config, "hydra-genetics/alignment", path="workflow/Snakefile", tag=config["modules"]["alignment"])
     config:
         config
-
 
 use rule * from alignment as alignment_*
 
@@ -105,11 +92,7 @@ use rule samtools_extract_reads from alignment as alignment_samtools_extract_rea
 
 module snv_indels:
     snakefile:
-        github(
-            "hydra-genetics/snv_indels",
-            path="workflow/Snakefile",
-            tag="ebf6671",
-        )
+        get_module_snakefile(config, "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
     config:
         config
 
@@ -125,11 +108,7 @@ use rule fix_af from snv_indels as snv_indels_fix_af with:
 
 module fusions:
     snakefile:
-        github(
-            "hydra-genetics/fusions",
-            path="workflow/Snakefile",
-            tag="v0.1.0",
-        )
+        get_module_snakefile(config, "hydra-genetics/fusions", path="workflow/Snakefile", tag=config["modules"]["fusions"])
     config:
         config
 
@@ -137,13 +116,10 @@ module fusions:
 use rule * from fusions as fusions_*
 
 
+
 module qc:
     snakefile:
-        github(
-            "hydra-genetics/qc",
-            path="workflow/Snakefile",
-            tag="2c37a18",
-        )
+        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
     config:
         config
 
