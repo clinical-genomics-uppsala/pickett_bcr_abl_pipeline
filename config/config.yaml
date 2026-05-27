@@ -9,9 +9,9 @@ hydra_local_path: /proj/ngi2024001/nobackup/bin/wp2_abl/hydra-genetics
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
-output: "{{REFERENCE_DATA}}/output_files.yaml"
+output: "output_files.yaml"
 
-default_container: '/proj/ngi2024001/nobackup/bin/wp2_abl/apptainer_cache/hydragenetics_common_1.11.1.sif'
+default_container: '{{APPTAINER_CACHE}}/hydragenetics_common_1.11.1.sif'
 
 modules:
   alignment: v0.6.0
@@ -90,7 +90,7 @@ multiqc:
   container: '{{APPTAINER_CACHE}}/hydragenetics_multiqc_1.11.sif'
   reports:
     RNA:
-      config: "{{REFERENCE_DATA}}/multiqc_config_rna.yaml"
+      config: "multiqc_config_rna.yaml"
       included_unit_types: ["R"]
       qc_files:
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
