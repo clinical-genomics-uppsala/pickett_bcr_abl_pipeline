@@ -14,8 +14,22 @@ include: "rules/summary_report.smk"
 
 ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
 ruleorder: snv_indels_tabix > annotation_tabix_vcf
-# ruleorder: copy_bai_file > alignment_samtools_index
-# ruleorder: copy_tbi_file > snv_indels_tabix > annotation_tabix_vcf
+
+
+#  To prevent dry run to fail on background which loads Snakefile but lacks bai output:
+def has_output_file(name):
+    files = output_spec.get("files", output_spec) if isinstance(output_spec, dict) else output_spec
+    return any(item.get("name") == name for item in files)
+
+
+if has_output_file("bai file"):
+
+    ruleorder: copy_bai_file > alignment_samtools_index
+
+
+if has_output_file("tbi file"):
+
+    ruleorder: copy_tbi_file > snv_indels_tabix > annotation_tabix_vcf
 
 
 report: "report/workflow.rst"
@@ -199,11 +213,11 @@ use rule multiqc from qc as qc_multiqc with:
         + ",".join(
             [
                 "_%s_%s_%s" % (u.flowcell, u.lane, u.barcode)
-                        for sample in get_samples(samples)
-                        for u in units.loc[sample].dropna().itertuples()
-                    ]
-                    + [".dup", "_R"]
-                )
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+            ]
+            + [".dup", "_R"]
+        )
         + '}"',
 
 
