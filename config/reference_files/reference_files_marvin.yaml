@@ -1,5 +1,7 @@
+# Marvin reference registry for hg19 assets and containers.
+# Paths are rooted in the Marvin shared reference tree.
 reference:
-  fasta: 
+  fasta:
     path: pickett/hg19.with.mt.fasta
     type: file
     url: file:/data/ref_genomes/hg19/genome_fasta/hg19.with.mt.fasta
@@ -10,9 +12,9 @@ reference:
     url: file:/data/ref_genomes/hg19/genome_fasta/hg19.with.mt.fasta.fai
     checksum: 6071b578df509d097874b3e58a1a9fc6
   design_bed:
-    path: pickett/bcr_abl1.bed
+    path: pickett/annotations_hg19/bcr_abl1.bed
     type: file
-    url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/bcr_abl1.bed
+    url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/bcr_abl1.bed
     checksum: 40cdaf65fe70e751bd1cb554b93c0379
   background:
     path: pickett/background_panel.tsv
@@ -20,10 +22,10 @@ reference:
     url: file:/projects/wp2/nobackup/BCR_ABL1/Bin/backgrounds/240314/references/create_background_file/background_panel.tsv
     checksum: b5f32f96167f2ff79c72bef915ee5c89
   gtf:
-    path: pickett/hg19.refGene.gtf 
+    path: pickett/hg19.refGene.gtf
     checksum: 57b812f0595dc8a446ca81fe568e142d
     type: file
-    url: file:/data/ref_genomes/hg19/gtf/hg19.refGene.gtf 
+    url: file:/data/ref_genomes/hg19/gtf/hg19.refGene.gtf
   arriba_blacklist:
     path: pickett/blacklist_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
     checksum: ca7b0b42ec2498814a5c408a5477e052
@@ -59,7 +61,7 @@ arriba:
     checksum: b5bc63c70c9eb08c71528ee8b0186901
     type: file
     url: file:/data/ref_data/arriba/arriba_v2.3.0/database/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3
-  known_fusions: 
+  known_fusions:
     path: pickett/known_fusions_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
     checksum: 2f063a0065c1c88d86c859b924d8d590
     type: file
@@ -71,18 +73,18 @@ arriba_draw_fusion:
     checksum: 9333eaa96c56fa22624ab432b8391b2b
     type: file
     url: file:/data/ref_data/arriba/arriba_v2.3.0/database/cytobands_hg19_hs37d5_GRCh37_v2.3.0.tsv
-    
-fusioncatcher_files: # not used but req
+
+fusioncatcher_files:
   path: pickett/human_v102.tar.gz
   compressed_checksum: 2dc3e314cd1fe721be12bc30aa1b866e
   type: folder
   url: file:/scratch/picket_miarka_files/human_v102.tar.gz
-  
+
 mosdepth_bed:
-  path: pickett/config/branford_SNVs_230118.bed
+  path: pickett/annotations_hg19/branford_SNVs_230118.bed
   checksum: 65e0f3b28f42a4a8bcfff4bd84787350
   type: file
-  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/branford_SNVs_230118.bed
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/branford_SNVs_230118.bed
 
 multiqc:
   path: pickett/multiqc_config_rna.yaml
@@ -91,31 +93,31 @@ multiqc:
   url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/multiqc_config_rna.yaml
 
 rseqc_gene_body_coverage:
-  path: pickett/bcr_abl1_rseqc.bed
+  path: pickett/annotations_hg19/bcr_abl1_rseqc.bed
   checksum: d5648be9fe14bc7bef197feaa4890643
   type: file
-  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/bcr_abl1_rseqc.bed
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/bcr_abl1_rseqc.bed
 
 summary_report:
-  path: pickett/branford_SNVs_230118.bed
+  path: pickett/annotations_hg19/branford_SNVs_230118.bed
   checksum: 65e0f3b28f42a4a8bcfff4bd84787350
   type: file
-  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/branford_SNVs_230118.bed
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/branford_SNVs_230118.bed
 
 output:
   output_files:
   path: pickett/output_files.yaml
   checksum: c587387f83632432e69503568e6de6cd
   type: file
-  url: file:/scratch/picket_miarka_files/pickett_bcr_abl_pipeline/config/output_files.yaml
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/output_files.yaml
 
 star_fusion:
-  path: pickett/star-fusion.tar.gz 
+  path: pickett/star-fusion.tar.gz
   compressed_checksum: 6c3de3e42143bd77829308292bbf31da
   type: folder
   url: file:/scratch/picket_miarka_files/star-fusion_GRCh37.tar.gz
   content_checksum:
-    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58d9c71cd1f0e45668c5ec597
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58c9d71cd1f0e45668c5ec597
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.dat.gz: 6424901ec3e9c995b834c9d3259c0771
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.idx: b71d0e5cd71cf082d6e368d899d90b56
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/fusion_annot_lib.gz: b3e0a0ffaa8fc7853435c8a2397d366a
@@ -156,8 +158,4 @@ star_fusion:
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbInfo.txt: 2f354d28454bb54054831eed48fe41a0
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.fromGTF.out.tab: 1ec75ded0c18a68614ea379826fa6606
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.out.tab: d7cf96222857df81e87aa467149345ee
-    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/transcriptInfo.tab: a1bf060b944620b13c7330fb7f105cc9
-
-
-
-    
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/transcriptInfo.tab: a1bf060b944620b13c7330fb7f105cc9

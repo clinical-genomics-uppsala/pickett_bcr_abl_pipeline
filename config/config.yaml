@@ -1,10 +1,9 @@
 ---
+# Shared pipeline config.
+# Cluster-specific paths and reference registries live under:
+# - config/site_configs/
+# - config/reference_files/
 PIPELINE_VERSION: v0.2.2
-
-
-APPTAINER_CACHE: /proj/ngi2024001/nobackup/bin/wp2_abl/apptainer_cache
-
-hydra_local_path: /proj/ngi2024001/nobackup/bin/wp2_abl/hydra-genetics
 
 resources: "resources.yaml"
 samples: "samples.tsv"
