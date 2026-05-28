@@ -18,29 +18,14 @@ rule bcftools_reheader:
             config.get("bcftools_reheader", {}).get("benchmark_repeats", 1),
         )
     container:
-        config.get("bcftools_reheader", {}).get(
-            "container", config["default_container"]
-        )
-    threads:
-        config.get("bcftools_reheader", {}).get(
-            "threads", config["default_resources"]["threads"]
-        )
+        config.get("bcftools_reheader", {}).get("container", config["default_container"])
+    threads: config.get("bcftools_reheader", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        mem_mb=config.get("bcftools_reheader", {}).get(
-            "mem_mb", config["default_resources"]["mem_mb"]
-        ),
-        mem_per_cpu=config.get("bcftools_reheader", {}).get(
-            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
-        ),
-        partition=config.get("bcftools_reheader", {}).get(
-            "partition", config["default_resources"]["partition"]
-        ),
-        threads=config.get("bcftools_reheader", {}).get(
-            "threads", config["default_resources"]["threads"]
-        ),
-        time=config.get("bcftools_reheader", {}).get(
-            "time", config["default_resources"]["time"]
-        ),
+        mem_mb=config.get("bcftools_reheader", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("bcftools_reheader", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("bcftools_reheader", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("bcftools_reheader", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("bcftools_reheader", {}).get("time", config["default_resources"]["time"]),
     params:
         extra=config.get("bcftools_reheader", {}).get("extra", ""),
     message:

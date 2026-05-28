@@ -27,21 +27,11 @@ rule summary_report:
         config.get("summary_report", {}).get("container", config["default_container"])
     threads: config.get("summary_report", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        mem_mb=config.get("summary_report", {}).get(
-            "mem_mb", config["default_resources"]["mem_mb"]
-        ),
-        mem_per_cpu=config.get("summary_report", {}).get(
-            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
-        ),
-        partition=config.get("summary_report", {}).get(
-            "partition", config["default_resources"]["partition"]
-        ),
-        threads=config.get("summary_report", {}).get(
-            "threads", config["default_resources"]["threads"]
-        ),
-        time=config.get("summary_report", {}).get(
-            "time", config["default_resources"]["time"]
-        ),
+        mem_mb=config.get("summary_report", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("summary_report", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("summary_report", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("summary_report", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("summary_report", {}).get("time", config["default_resources"]["time"]),
     params:
         extra=config.get("summary_report", {}).get("extra", ""),
     message:

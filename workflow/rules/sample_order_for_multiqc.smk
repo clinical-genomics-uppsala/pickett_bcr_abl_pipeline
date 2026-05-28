@@ -16,29 +16,14 @@ rule sample_order_for_multiqc:
             config.get("sample_order_for_multiqc", {}).get("benchmark_repeats", 1),
         )
     container:
-        config.get("sample_order_for_multiqc", {}).get(
-            "container", config["default_container"]
-        )
-    threads:
-        config.get("sample_order_for_multiqc", {}).get(
-            "threads", config["default_resources"]["threads"]
-        )
+        config.get("sample_order_for_multiqc", {}).get("container", config["default_container"])
+    threads: config.get("sample_order_for_multiqc", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        mem_mb=config.get("sample_order_for_multiqc", {}).get(
-            "mem_mb", config["default_resources"]["mem_mb"]
-        ),
-        mem_per_cpu=config.get("sample_order_for_multiqc", {}).get(
-            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
-        ),
-        partition=config.get("sample_order_for_multiqc", {}).get(
-            "partition", config["default_resources"]["partition"]
-        ),
-        threads=config.get("sample_order_for_multiqc", {}).get(
-            "threads", config["default_resources"]["threads"]
-        ),
-        time=config.get("sample_order_for_multiqc", {}).get(
-            "time", config["default_resources"]["time"]
-        ),
+        mem_mb=config.get("sample_order_for_multiqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("sample_order_for_multiqc", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("sample_order_for_multiqc", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("sample_order_for_multiqc", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("sample_order_for_multiqc", {}).get("time", config["default_resources"]["time"]),
     params:
         filelist=[(u.sample, u.fastq1) for u in units[units.type == "R"].itertuples()],
     message:

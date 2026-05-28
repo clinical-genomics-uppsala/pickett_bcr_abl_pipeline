@@ -20,21 +20,11 @@ rule convert_pdf:
         config.get("convert_pdf", {}).get("container", config["default_container"])
     threads: config.get("convert_pdf", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        mem_mb=config.get("convert_pdf", {}).get(
-            "mem_mb", config["default_resources"]["mem_mb"]
-        ),
-        mem_per_cpu=config.get("convert_pdf", {}).get(
-            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
-        ),
-        partition=config.get("convert_pdf", {}).get(
-            "partition", config["default_resources"]["partition"]
-        ),
-        threads=config.get("convert_pdf", {}).get(
-            "threads", config["default_resources"]["threads"]
-        ),
-        time=config.get("convert_pdf", {}).get(
-            "time", config["default_resources"]["time"]
-        ),
+        mem_mb=config.get("convert_pdf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("convert_pdf", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("convert_pdf", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("convert_pdf", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("convert_pdf", {}).get("time", config["default_resources"]["time"]),
     params:
         extra=config.get("convert_pdf", {}).get("extra", ""),
     message:
