@@ -47,9 +47,7 @@ use rule background_annotation from annotation as annotation_background_annotati
         vcf="snv_indels/pisces/{sample}_R.normalized.sorted.vcf.gz",
         tbi="snv_indels/pisces/{sample}_R.normalized.sorted.vcf.gz.tbi",
     output:
-        vcf=temp(
-            "snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf"
-        ),
+        vcf=temp("snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf"),
     log:
         "snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf.log",
     benchmark:
@@ -98,9 +96,7 @@ use rule star from alignment as alignment_star with:
         extra=lambda wildcards: "%s %s"
         % (
             config.get("star", {}).get("extra", ""),
-            config.get("star", {}).get(
-                "read_group", generate_read_group_star(wildcards)
-            ),
+            config.get("star", {}).get("read_group", generate_read_group_star(wildcards)),
         ),
 
 
@@ -184,19 +180,12 @@ use rule multiqc from qc as qc_multiqc with:
                 for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
                 for sample in get_samples(samples)
                 for u in units.loc[sample].dropna().itertuples()
-                if u.type
-                in config["multiqc"]["reports"][wildcards.report][
-                    "included_unit_types"
-                ]
+                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
                 for read in ["fastq1", "fastq2"]
-                for ext in config.get("picard_collect_multiple_metrics", {}).get(
-                    "output_ext", [""]
-                )
+                for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
             ]
         ),
-        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report][
-            "config"
-        ],
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
         sample_order="qc/multiqc/sample_order.tsv",
         sample_replacement="qc/multiqc/sample_replacement.tsv",
     params:
