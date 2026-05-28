@@ -199,11 +199,11 @@ use rule multiqc from qc as qc_multiqc with:
         + ",".join(
             [
                 "_%s_%s_%s" % (u.flowcell, u.lane, u.barcode)
-                for sample in get_samples(samples)
-                for u in units.loc[sample].dropna().itertuples()
-            ]
-            + [".dup", "_R"]
-        )
+                    for sample in get_samples(samples)
+                    for u in units.loc[sample].dropna().itertuples()
+                ]
+                + [".dup", "_R"]
+            )
         + '}"',
 
 
