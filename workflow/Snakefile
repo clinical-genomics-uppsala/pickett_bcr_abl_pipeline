@@ -15,7 +15,7 @@ include: "rules/summary_report.smk"
 ruleorder: snv_indels_bgzip > annotation_bgzip_vcf
 ruleorder: snv_indels_tabix > annotation_tabix_vcf
 # ruleorder: copy_bai_file > alignment_samtools_index
-# ruleorder: copy_tbi_file > snv_indels_tabix > annotation_tabix_vcf
+ruleorder: copy_tbi_file > snv_indels_tabix > annotation_tabix_vcf
 
 
 report: "report/workflow.rst"
