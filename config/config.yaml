@@ -5,10 +5,13 @@
 # - config/reference_files/
 PIPELINE_VERSION: v0.2.2
 
+CONFIG_DIR: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config"
+ANNOTATIONS: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/annotations_hg19"
+
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
-output: "output_files.yaml"
+output: "{{CONFIG_DIR}}/output_files.yaml"
 
 default_container: '{{APPTAINER_CACHE}}/hydragenetics_common_1.11.1.sif'
 
@@ -24,7 +27,7 @@ reference:
   genome_dir: "{{REFERENCE_DATA}}/" # req by align not used
   fasta: "{{REFERENCE_DATA}}/hg19.with.mt.fasta"
   fai: "{{REFERENCE_DATA}}/hg19.with.mt.fasta.fai"
-  design_bed: "{{REFERENCE_DATA}}/bcr_abl1.bed"
+  design_bed: "{{ANNOTATIONS}}/bcr_abl1.bed"
   background: "{{REFERENCE_DATA}}/background_panel.tsv"
   skip_chrs:
     - "chr1"
@@ -79,17 +82,17 @@ fastqc:
 
 fusioncatcher: # not used but req
   container: '{{APPTAINER_CACHE}}/hydragenetics_fusioncatcher_1.33.sif'
-  genome_path: "{{REFERENCE_DATA}}/human_v102.tar.gz"
+  genome_path: ""
 
 mosdepth_bed:
   container: '{{APPTAINER_CACHE}}/hydragenetics_mosdepth_0.3.2.sif'
-  design_bed: "{{REFERENCE_DATA}}/branford_SNVs_230118.bed"
+  design_bed: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"
 
 multiqc:
   container: '{{APPTAINER_CACHE}}/hydragenetics_multiqc_1.11.sif'
   reports:
     RNA:
-      config: "multiqc_config_rna.yaml"
+      config: "{{CONFIG_DIR}}/multiqc_config_rna.yaml"
       included_unit_types: ["R"]
       qc_files:
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
@@ -105,11 +108,11 @@ multiqc:
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
 
 rseqc_gene_body_coverage:
-  bed: "{{REFERENCE_DATA}}/bcr_abl1_rseqc.bed"
+  bed: "{{ANNOTATIONS}}/bcr_abl1_rseqc.bed"
   container: '{{APPTAINER_CACHE}}/hydragenetics_rseqc_4.0.0.sif'
 
 rseqc_inner_distance:
-  bed: "{{REFERENCE_DATA}}/bcr_abl1_rseqc.bed"
+  bed: "{{ANNOTATIONS}}/bcr_abl1_rseqc.bed"
   container: '{{APPTAINER_CACHE}}/hydragenetics_rseqc_4.0.0.sif'
 
 star:
@@ -122,7 +125,7 @@ star_fusion:
   genome_path: "{{REFERENCE_DATA}}/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/"
 
 summary_report:
-  branford: "{{REFERENCE_DATA}}/branford_SNVs_230118.bed"
+  branford: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"
 
 trimmer_software: "fastp_pe"
 
