@@ -17,17 +17,15 @@ ruleorder: snv_indels_tabix > annotation_tabix_vcf
 
 
 #  To prevent dry run to fail on background which loads Snakefile but lacks bai output:
-def has_output_file(name):
-    files = output_spec.get("files", output_spec) if isinstance(output_spec, dict) else output_spec
-    return any(item.get("name") == name for item in files)
+output_files = output_spec.get("files", output_spec) if isinstance(output_spec, dict) else output_spec
+output_file_names = {item.get("name") for item in output_files}
 
-
-if has_output_file("bai file"):
+if "bai file" in output_file_names:
 
     ruleorder: copy_bai_file > alignment_samtools_index
 
 
-if has_output_file("tbi file"):
+if "tbi file" in output_file_names:
 
     ruleorder: copy_tbi_file > snv_indels_tabix > annotation_tabix_vcf
 
