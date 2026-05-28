@@ -28,7 +28,12 @@ rule all:
 
 module annotation:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/annotation", path="workflow/Snakefile", tag=config["modules"]["annotation"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/annotation",
+            path="workflow/Snakefile",
+            tag=config["modules"]["annotation"],
+        )
     config:
         config
 
@@ -42,7 +47,9 @@ use rule background_annotation from annotation as annotation_background_annotati
         vcf="snv_indels/pisces/{sample}_R.normalized.sorted.vcf.gz",
         tbi="snv_indels/pisces/{sample}_R.normalized.sorted.vcf.gz.tbi",
     output:
-        vcf=temp("snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf"),
+        vcf=temp(
+            "snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf"
+        ),
     log:
         "snv_indels/pisces/{sample}_R.normalized.sorted.background_annotated.vcf.log",
     benchmark:
@@ -54,7 +61,12 @@ use rule background_annotation from annotation as annotation_background_annotati
 
 module prealignment:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/prealignment", path="workflow/Snakefile", tag=config["modules"]["prealignment"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/prealignment",
+            path="workflow/Snakefile",
+            tag=config["modules"]["prealignment"],
+        )
     config:
         config
 
@@ -64,9 +76,15 @@ use rule * from prealignment as prealignment_*
 
 module alignment:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/alignment", path="workflow/Snakefile", tag=config["modules"]["alignment"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/alignment",
+            path="workflow/Snakefile",
+            tag=config["modules"]["alignment"],
+        )
     config:
         config
+
 
 use rule * from alignment as alignment_*
 
@@ -80,7 +98,9 @@ use rule star from alignment as alignment_star with:
         extra=lambda wildcards: "%s %s"
         % (
             config.get("star", {}).get("extra", ""),
-            config.get("star", {}).get("read_group", generate_read_group_star(wildcards)),
+            config.get("star", {}).get(
+                "read_group", generate_read_group_star(wildcards)
+            ),
         ),
 
 
@@ -92,7 +112,12 @@ use rule samtools_extract_reads from alignment as alignment_samtools_extract_rea
 
 module snv_indels:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/snv_indels", path="workflow/Snakefile", tag=config["modules"]["snv_indels"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/snv_indels",
+            path="workflow/Snakefile",
+            tag=config["modules"]["snv_indels"],
+        )
     config:
         config
 
@@ -108,7 +133,12 @@ use rule fix_af from snv_indels as snv_indels_fix_af with:
 
 module fusions:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/fusions", path="workflow/Snakefile", tag=config["modules"]["fusions"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/fusions",
+            path="workflow/Snakefile",
+            tag=config["modules"]["fusions"],
+        )
     config:
         config
 
@@ -116,10 +146,14 @@ module fusions:
 use rule * from fusions as fusions_*
 
 
-
 module qc:
     snakefile:
-        get_module_snakefile(config, "hydra-genetics/qc", path="workflow/Snakefile", tag=config["modules"]["qc"])
+        get_module_snakefile(
+            config,
+            "hydra-genetics/qc",
+            path="workflow/Snakefile",
+            tag=config["modules"]["qc"],
+        )
     config:
         config
 
@@ -138,16 +172,31 @@ use rule multiqc from qc as qc_multiqc with:
     input:
         files=lambda wildcards: set(
             [
-                file.format(sample=sample, type=u.type, lane=u.lane, flowcell=u.flowcell, barcode=u.barcode, read=read, ext=ext)
+                file.format(
+                    sample=sample,
+                    type=u.type,
+                    lane=u.lane,
+                    flowcell=u.flowcell,
+                    barcode=u.barcode,
+                    read=read,
+                    ext=ext,
+                )
                 for file in config["multiqc"]["reports"][wildcards.report]["qc_files"]
                 for sample in get_samples(samples)
                 for u in units.loc[sample].dropna().itertuples()
-                if u.type in config["multiqc"]["reports"][wildcards.report]["included_unit_types"]
+                if u.type
+                in config["multiqc"]["reports"][wildcards.report][
+                    "included_unit_types"
+                ]
                 for read in ["fastq1", "fastq2"]
-                for ext in config.get("picard_collect_multiple_metrics", {}).get("output_ext", [""])
+                for ext in config.get("picard_collect_multiple_metrics", {}).get(
+                    "output_ext", [""]
+                )
             ]
         ),
-        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report]["config"],
+        config=lambda wildcards: config["multiqc"]["reports"][wildcards.report][
+            "config"
+        ],
         sample_order="qc/multiqc/sample_order.tsv",
         sample_replacement="qc/multiqc/sample_replacement.tsv",
     params:
@@ -161,12 +210,12 @@ use rule multiqc from qc as qc_multiqc with:
         + ",".join(
             [
                 "_%s_%s_%s" % (u.flowcell, u.lane, u.barcode)
-                        for sample in get_samples(samples)
-                        for u in units.loc[sample].dropna().itertuples()
-                    ]
-                    + [".dup", "_R"]
-                )
-                + '}"',
+                for sample in get_samples(samples)
+                for u in units.loc[sample].dropna().itertuples()
+            ]
+            + [".dup", "_R"]
+        )
+        + '}"',
 
 
 use rule samtools_stats from qc as qc_samtools_stats with:

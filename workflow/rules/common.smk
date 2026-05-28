@@ -30,7 +30,9 @@ include: "results.smk"
 #### Set up and validate config file
 
 if not workflow.overwrite_configfiles:
-    sys.exit("At least one config file must be passed using --configfile/--configfiles, by command line or a profile!")
+    sys.exit(
+        "At least one config file must be passed using --configfile/--configfiles, by command line or a profile!"
+    )
 
 
 config = replace_dict_variables(config)
@@ -75,7 +77,9 @@ validate(units, schema="../schemas/units.schema.yaml")
 ### Read and validate output
 with open(config["output"], "r") as f:
     output_spec = yaml.safe_load(f.read())
-    validate(output_spec, schema="../schemas/output_files.schema.yaml", set_default=True)
+    validate(
+        output_spec, schema="../schemas/output_files.schema.yaml", set_default=True
+    )
 
 
 def generate_read_group_star(wildcards):

@@ -9,8 +9,6 @@ rule convert_pdf:
         pdf="fusions/arriba_draw_fusion/{sample}_{type}.pdf",
     output:
         jpg="fusions/arriba_draw_fusion/{sample}_{type}_page1.jpg",
-    params:
-        extra=config.get("convert_pdf", {}).get("extra", ""),
     log:
         "fusions/arriba_draw_fusion/{sample}_{type}_page1.jpg.log",
     benchmark:
@@ -18,15 +16,27 @@ rule convert_pdf:
             "fusions/arriba_draw_fusion/{sample}_{type}_page1.jpg.benchmark.tsv",
             config.get("convert_pdf", {}).get("benchmark_repeats", 1),
         )
-    threads: config.get("convert_pdf", {}).get("threads", config["default_resources"]["threads"])
-    resources:
-        mem_mb=config.get("convert_pdf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
-        mem_per_cpu=config.get("convert_pdf", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
-        partition=config.get("convert_pdf", {}).get("partition", config["default_resources"]["partition"]),
-        threads=config.get("convert_pdf", {}).get("threads", config["default_resources"]["threads"]),
-        time=config.get("convert_pdf", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("convert_pdf", {}).get("container", config["default_container"])
+    threads: config.get("convert_pdf", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("convert_pdf", {}).get(
+            "mem_mb", config["default_resources"]["mem_mb"]
+        ),
+        mem_per_cpu=config.get("convert_pdf", {}).get(
+            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
+        ),
+        partition=config.get("convert_pdf", {}).get(
+            "partition", config["default_resources"]["partition"]
+        ),
+        threads=config.get("convert_pdf", {}).get(
+            "threads", config["default_resources"]["threads"]
+        ),
+        time=config.get("convert_pdf", {}).get(
+            "time", config["default_resources"]["time"]
+        ),
+    params:
+        extra=config.get("convert_pdf", {}).get("extra", ""),
     message:
         "{rule}: Convert first page of {input.pdf} to {output.jpg}"
     shell:

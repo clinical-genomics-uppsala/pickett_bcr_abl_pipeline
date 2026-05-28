@@ -33,16 +33,28 @@ def generate_copy_rules(output_spec):
         if f["input"] is None:
             continue
 
-        rule_name = "copy_{}".format("_".join(re.sub(r"[\"'-.,]", "", f["name"].strip().lower()).split()))
+        rule_name = "copy_{}".format(
+            "_".join(re.sub(r"[\"'-.,]", "", f["name"].strip().lower()).split())
+        )
         input_file = pathlib.Path(f["input"])
         output_file = output_directory / pathlib.Path(f["output"])
 
-        mem_mb = config.get("_copy", {}).get("mem_mb", config["default_resources"]["mem_mb"])
-        mem_per_cpu = config.get("_copy", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"])
-        partition = config.get("_copy", {}).get("partition", config["default_resources"]["partition"])
-        threads = config.get("_copy", {}).get("threads", config["default_resources"]["threads"])
+        mem_mb = config.get("_copy", {}).get(
+            "mem_mb", config["default_resources"]["mem_mb"]
+        )
+        mem_per_cpu = config.get("_copy", {}).get(
+            "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
+        )
+        partition = config.get("_copy", {}).get(
+            "partition", config["default_resources"]["partition"]
+        )
+        threads = config.get("_copy", {}).get(
+            "threads", config["default_resources"]["threads"]
+        )
         time = config.get("_copy", {}).get("time", config["default_resources"]["time"])
-        copy_container = config.get("_copy", {}).get("container", config["default_container"])
+        copy_container = config.get("_copy", {}).get(
+            "container", config["default_container"]
+        )
 
         rule_code = "\n".join(
             [
