@@ -1,17 +1,34 @@
 ---
+# Shared pipeline config.
+# Cluster-specific paths and reference registries live under:
+# - config/site_configs/
+# - config/reference_files/
+PIPELINE_VERSION: v0.2.2
+
+CONFIG_DIR: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config"
+ANNOTATIONS: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/annotations_hg19"
+
 resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
-output: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/output_files.yaml"
+output: "{{CONFIG_DIR}}/output_files.yaml"
 
-default_container: "docker://hydragenetics/common:1.11.1"
+default_container: '{{APPTAINER_CACHE}}/hydragenetics_common_1.11.1.sif'
+
+modules:
+  alignment: v0.6.0
+  annotation: b25e8ea
+  snv_indels: ebf6671
+  prealignment: v1.2.0
+  fusions: v0.2.2
+  qc: 2c37a18
 
 reference:
-  genome_dir: "" # req by align not used
-  fasta: ""
-  fai: ""
-  design_bed: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/bcr_abl1.bed"
-  background: "references/create_background_file/background_panel.tsv"
+  genome_dir: "{{REFERENCE_DATA}}/" # req by align not used
+  fasta: "{{REFERENCE_DATA}}/hg19.with.mt.fasta"
+  fai: "{{REFERENCE_DATA}}/hg19.with.mt.fasta.fai"
+  design_bed: "{{ANNOTATIONS}}/bcr_abl1.bed"
+  background: "{{REFERENCE_DATA}}/background_panel.tsv"
   skip_chrs:
     - "chr1"
     - "chr2"
@@ -38,44 +55,44 @@ reference:
     - "chrM"
 
 arriba:
-  container: "docker://hydragenetics/arriba:2.3.0"
-  assembly: ""
-  blacklist: ""
-  gtf: ""
-  extra: "-p arriba_v2.3.0/database/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3 -k arriba_v2.3.0/database/known_fusions_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_arriba_2.3.0.sif'
+  assembly: "{{REFERENCE_DATA}}/hg19.with.mt.fasta"
+  blacklist: "{{REFERENCE_DATA}}/blacklist_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz"
+  gtf: "{{REFERENCE_DATA}}/hg19.refGene.gtf"
+  extra: "-p {{REFERENCE_DATA}}/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3 -k {{REFERENCE_DATA}}/known_fusions_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz"
 
 arriba_draw_fusion:
-  container: "docker://hydragenetics/arriba:2.3.0"
-  cytobands: ""
-  gtf: ""
-  protein_domains: ""
+  container: '{{APPTAINER_CACHE}}/hydragenetics_arriba_2.3.0.sif'
+  cytobands: "{{REFERENCE_DATA}}/cytobands_hg19_hs37d5_GRCh37_v2.3.0.tsv"
+  gtf: "{{REFERENCE_DATA}}/hg19.refGene.gtf"
+  protein_domains: "{{REFERENCE_DATA}}/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3"
 
 convert_pdf:
-  container: "docker://dpokidov/imagemagick:7.1.0-47-ubuntu"
+  container: '{{APPTAINER_CACHE}}/dpokidov_imagemagick_7.1.0-47-ubuntu.sif'
 
 dotnet_pisces:
-  container: "container_pisces_v5.2.11.sif" # illumina pisces v5.2.11
+  container: '{{APPTAINER_CACHE}}/_container_pisces_v5.2.11.sif' # illumina pisces v5.2.11
 
 fastp_pe:
-  container: "docker://hydragenetics/fastp:0.20.1"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_fastp_0.20.1.sif'
   extra: "-x "
 
 fastqc:
-  container: "docker://hydragenetics/fastqc:0.11.9"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_fastqc_0.11.9.sif'
 
 fusioncatcher: # not used but req
-  container: "docker://hydragenetics/fusioncatcher:1.33"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_fusioncatcher_1.33.sif'
   genome_path: ""
 
 mosdepth_bed:
-  container: "docker://hydragenetics/mosdepth:0.3.2"
-  design_bed: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/branford_SNVs_230118.bed"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_mosdepth_0.3.2.sif'
+  design_bed: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.11"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_multiqc_1.11.sif'
   reports:
     RNA:
-      config: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/multiqc_config_rna.yaml"
+      config: "{{CONFIG_DIR}}/multiqc_config_rna.yaml"
       included_unit_types: ["R"]
       qc_files:
         - "qc/fastqc/{sample}_{type}_{flowcell}_{lane}_{barcode}_{read}_fastqc.zip"
@@ -90,32 +107,30 @@ multiqc:
         - "qc/rseqc_gene_body_coverage/{sample}_{type}.geneBodyCoverage.txt"
         - "qc/rseqc_inner_distance/{sample}_{type}.inner_distance_freq.txt"
 
-# rseqc_bam_stats:
-
 rseqc_gene_body_coverage:
-  bed: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/bcr_abl1_rseqc.bed"
-  container: "docker://hydragenetics/rseqc:4.0.0"
+  bed: "{{ANNOTATIONS}}/bcr_abl1_rseqc.bed"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_rseqc_4.0.0.sif'
 
 rseqc_inner_distance:
-  bed: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/bcr_abl1_rseqc.bed"
-  container: "docker://hydragenetics/rseqc:4.0.0"
+  bed: "{{ANNOTATIONS}}/bcr_abl1_rseqc.bed"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_rseqc_4.0.0.sif'
 
 star:
-  container: "docker://hydragenetics/star:2.7.10a"
-  genome_index: "/data/ref_data/star/v2.7.10a_hg19/"
-  extra: "--outSAMmapqUnique 60 --quantMode GeneCounts --sjdbGTFfile hg19.refGene.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_star_2.7.10a.sif'
+  genome_index: "{{REFERENCE_DATA}}/star_index_v2.7.10a_hg19/"
+  extra: "--outSAMmapqUnique 60 --quantMode GeneCounts --sjdbGTFfile {{REFERENCE_DATA}}/hg19.refGene.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
 
 star_fusion:
-  container: "docker://hydragenetics/star-fusion:1.10.1"
-  genome_path: ""
+  container: '{{APPTAINER_CACHE}}/hydragenetics_star-fusion_1.10.1.sif'
+  genome_path: "{{REFERENCE_DATA}}/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/"
 
 summary_report:
-  branford: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/branford_SNVs_230118.bed"
+  branford: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"
 
 trimmer_software: "fastp_pe"
 
 vt_decompose:
-  container: "docker://hydragenetics/vt:2015.11.10"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_vt_2015.11.10.sif'
 
 vt_normalize:
-  container: "docker://hydragenetics/vt:2015.11.10"
+  container: '{{APPTAINER_CACHE}}/hydragenetics_vt_2015.11.10.sif'

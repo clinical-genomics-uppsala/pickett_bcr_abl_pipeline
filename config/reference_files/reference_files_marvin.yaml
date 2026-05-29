@@ -1,0 +1,161 @@
+# Marvin reference registry for hg19 assets and containers.
+# Paths are rooted in the Marvin shared reference tree.
+reference:
+  fasta:
+    path: pickett/hg19.with.mt.fasta
+    type: file
+    url: file:/data/ref_genomes/hg19/genome_fasta/hg19.with.mt.fasta
+    checksum: 7c1739fd43764bd5e3b9b76ce8635bf0
+  fai:
+    path: pickett/hg19.with.mt.fasta.fai
+    type: file
+    url: file:/data/ref_genomes/hg19/genome_fasta/hg19.with.mt.fasta.fai
+    checksum: 6071b578df509d097874b3e58a1a9fc6
+  design_bed:
+    path: pickett/annotations_hg19/bcr_abl1.bed
+    type: file
+    url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/bcr_abl1.bed
+    checksum: 40cdaf65fe70e751bd1cb554b93c0379
+  background:
+    path: pickett/background_panel.tsv
+    type: file
+    url: file:/projects/wp2/nobackup/BCR_ABL1/Bin/backgrounds/240314/references/create_background_file/background_panel.tsv
+    checksum: b5f32f96167f2ff79c72bef915ee5c89
+  gtf:
+    path: pickett/hg19.refGene.gtf
+    checksum: 57b812f0595dc8a446ca81fe568e142d
+    type: file
+    url: file:/data/ref_genomes/hg19/gtf/hg19.refGene.gtf
+  arriba_blacklist:
+    path: pickett/blacklist_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
+    checksum: ca7b0b42ec2498814a5c408a5477e052
+    type: file
+    url: file:/data/ref_data/arriba/arriba_v2.3.0/database/blacklist_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
+
+star_reference:
+  genome_dir:
+    path: pickett/v2.7.10a_hg19.tar.gz
+    compressed_checksum: 12153681d1430a202b9f4eacff0016f7
+    type: folder
+    url: file:/data/ref_data/star/v2.7.10a_hg19.tar.gz
+    content_checksum:
+      v2.7.10a_hg19/chrLength.txt: 0f64a2d07604490b6224300156c306b8
+      v2.7.10a_hg19/chrNameLength.txt: 82e36e01fa26480931039ac178ad8e83
+      v2.7.10a_hg19/chrName.txt: 0dcde172be736accb508c2f36f497372
+      v2.7.10a_hg19/chrStart.txt: b13f254027a7a2dc1eaf6d8418962278
+      v2.7.10a_hg19/exonGeTrInfo.tab: e361a44a5fb8cde31953c10de9bc0fc7
+      v2.7.10a_hg19/exonInfo.tab: 1765bb10b661ae85f2187f10f0013c6a
+      v2.7.10a_hg19/geneInfo.tab: 4204ecc7415b8559da3956dad9d900a1
+      v2.7.10a_hg19/Genome: c909cdcd92394b388b6c4d59114fb020
+      v2.7.10a_hg19/genomeParameters.txt: 07f7e564fd564b33c96707c6e774e71d
+      v2.7.10a_hg19/SAindex: 9c8afd1168a301a06f77e2f3a8bdf3f7
+      v2.7.10a_hg19/SA: 90569083f6334b60f98990b345ef30d5
+      v2.7.10a_hg19/sjdbInfo.txt: 1f52300e98b2afc45dae40e84fcdc286
+      v2.7.10a_hg19/sjdbList.fromGTF.out.tab: 1d95981c7f1d11f4a63188c59afbc5f3
+      v2.7.10a_hg19/sjdbList.out.tab: 733e787255f5107fb720cd1a1e21256c
+      v2.7.10a_hg19/transcriptInfo.tab: 30534c855ab814aecf0e2a1cc7c306af
+
+arriba:
+  protein_fusions:
+    path: pickett/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3
+    checksum: b5bc63c70c9eb08c71528ee8b0186901
+    type: file
+    url: file:/data/ref_data/arriba/arriba_v2.3.0/database/protein_domains_hg19_hs37d5_GRCh37_v2.3.0.gff3
+  known_fusions:
+    path: pickett/known_fusions_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
+    checksum: 2f063a0065c1c88d86c859b924d8d590
+    type: file
+    url: file:/data/ref_data/arriba/arriba_v2.3.0/database/known_fusions_hg19_hs37d5_GRCh37_v2.3.0.tsv.gz
+
+arriba_draw_fusion:
+  cytobands:
+    path: pickett/cytobands_hg19_hs37d5_GRCh37_v2.3.0.tsv
+    checksum: 9333eaa96c56fa22624ab432b8391b2b
+    type: file
+    url: file:/data/ref_data/arriba/arriba_v2.3.0/database/cytobands_hg19_hs37d5_GRCh37_v2.3.0.tsv
+
+fusioncatcher_files:
+  path: pickett/human_v102.tar.gz
+  compressed_checksum: 2dc3e314cd1fe721be12bc30aa1b866e
+  type: folder
+  url: file:/scratch/picket_miarka_files/human_v102.tar.gz
+
+mosdepth_bed:
+  path: pickett/annotations_hg19/branford_SNVs_230118.bed
+  checksum: 65e0f3b28f42a4a8bcfff4bd84787350
+  type: file
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/branford_SNVs_230118.bed
+
+multiqc:
+  path: pickett/multiqc_config_rna.yaml
+  checksum: 32d7bb22f5c1cec036c2b6885218839b
+  type: file
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/multiqc_config_rna.yaml
+
+rseqc_gene_body_coverage:
+  path: pickett/annotations_hg19/bcr_abl1_rseqc.bed
+  checksum: d5648be9fe14bc7bef197feaa4890643
+  type: file
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/bcr_abl1_rseqc.bed
+
+summary_report:
+  path: pickett/annotations_hg19/branford_SNVs_230118.bed
+  checksum: 65e0f3b28f42a4a8bcfff4bd84787350
+  type: file
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/annotations_hg19/branford_SNVs_230118.bed
+
+output:
+  output_files:
+  path: pickett/output_files.yaml
+  checksum: c587387f83632432e69503568e6de6cd
+  type: file
+  url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/output_files.yaml
+
+star_fusion:
+  path: pickett/star-fusion.tar.gz
+  compressed_checksum: 6c3de3e42143bd77829308292bbf31da
+  type: folder
+  url: file:/scratch/picket_miarka_files/star-fusion_GRCh37.tar.gz
+  content_checksum:
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58c9d71cd1f0e45668c5ec597
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.dat.gz: 6424901ec3e9c995b834c9d3259c0771
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.idx: b71d0e5cd71cf082d6e368d899d90b56
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/fusion_annot_lib.gz: b3e0a0ffaa8fc7853435c8a2397d366a
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/fusion_annot_lib.idx: cd0b7014584e7d023613e02984bc32cf
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/pfam_domains.dbm: bf4d1789c6bd94461bf3bc099cfcf5b8
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/PFAM.domtblout.dat.gz: e7cad012bb29bc95e1b0db14482ae57e
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.cdna.fa.idx: 369af8461f786c9abd4f47f979da50b0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.cdna.fa: 3036147b0c50416df9ccfbe0870b0569
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.cds: 6e43b8d20c85a8f1d1c075a8b457100e
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.cdsplus.fa.idx: 843f3fa391225ba9f691713fc42e1ccb
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.cdsplus.fa: d9f8736aeb21f9a208e9b88b48278f6b
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.gtf.gene_spans: 09bf85ad5d2499ed52662ba1f92381c0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.gtf: 69e0d91528842af33e1ac92a305addb0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.gtf.mini.sortu: c08014b5322a3e6e7af17850c3f38894
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.pep: e75cd53bf52d555e7913419ad03f46c8
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_annot.prot_info.dbm: 196bf70e87eb0c5640bbebc425319e01
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.fai: e129ec46cc8c4720ea94c887d84abfc1
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa: f030f166fbfd1728eb59f90a43d1f2c0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.nhr: 6bd31fd9a0148abe074f9e4bdaa138eb
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.nin: 95033ab5b8d395d9ddb5e761e37021d7
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.nsq: 65989cf259cf4cda5995f8c0c3432af2
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/trans.blast.align_coords.align_coords.dat: 91d415783a580abd184b7bcdfa151e34
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/trans.blast.align_coords.align_coords.dbm: 3dc987f883b92a0f99b41b74e9a11a2a
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/trans.blast.dat.gz: 87cb8061835448491450e6f879f2f604
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/build.ok: d41d8cd98f00b204e9800998ecf8427e
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/chrLength.txt: be6b16bd7c977a83564b3a5834f95f6b
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/chrNameLength.txt: 3c85ebd581899a408a7ce10793b086b2
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/chrName.txt: b5e42c999c76690b7d3356ba51724921
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/chrStart.txt: 5ac1885586a8a11b2571167bf3bb194a
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/exonGeTrInfo.tab: 3056b83516dda5ec029520407b1d9ea6
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/exonInfo.tab: b6e8285c0f592d4135365a67239b2cbc
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/geneInfo.tab: 81c9183b5c0ab2d12ff9b9b0cec33df1
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/Genome: d684077a65e2d1725cbd26ab37427784
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/genomeParameters.txt: 2fe2d4855880f2d92803b4460e75a90d
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/Log.out: 281d7a3cb4eb852083babcc05cdb6dda
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/SAindex: b3368b37f79250dfa167fe13107051f0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/SA: 84ade1fff98fd2fa6207cc30cae04641
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbInfo.txt: 2f354d28454bb54054831eed48fe41a0
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.fromGTF.out.tab: 1ec75ded0c18a68614ea379826fa6606
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.out.tab: d7cf96222857df81e87aa467149345ee
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/transcriptInfo.tab: a1bf060b944620b13c7330fb7f105cc9

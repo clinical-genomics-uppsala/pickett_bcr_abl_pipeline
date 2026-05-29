@@ -10,9 +10,6 @@ rule create_background_file:
         tbis=expand("snv_indels/pisces/{sample}_R.merged.vcf.gz.tbi", sample=samples.index),
     output:
         background_file=temp("references/create_background_file/background_panel.tsv"),
-    params:
-        min_dp=config.get("create_artifact_file", {}).get("min_dp", 500),
-        max_af=config.get("create_artifact_file", {}).get("max_af", 0.05),
     log:
         "references/create_background_file/background_panel.tsv.log",
     benchmark:
@@ -20,6 +17,8 @@ rule create_background_file:
             "references/create_background_file/background_panel.tsv.benchmark.tsv",
             config.get("create_background_file", {}).get("benchmark_repeats", 1),
         )
+    container:
+        config.get("create_background_file", {}).get("container", config["default_container"])
     threads: config.get("create_background_file", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("create_background_file", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -27,8 +26,9 @@ rule create_background_file:
         partition=config.get("create_background_file", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("create_background_file", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("create_background_file", {}).get("time", config["default_resources"]["time"]),
-    container:
-        config.get("create_background_file", {}).get("container", config["default_container"])
+    params:
+        min_dp=config.get("create_artifact_file", {}).get("min_dp", 500),
+        max_af=config.get("create_artifact_file", {}).get("max_af", 0.05),
     message:
         "{rule}: create background PoN"
     script:

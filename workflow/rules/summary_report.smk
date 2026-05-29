@@ -16,8 +16,6 @@ rule summary_report:
         background=config["reference"]["background"],
     output:
         xlsx="Results/{sample}_{type}_summary.xlsx",
-    params:
-        extra=config.get("summary_report", {}).get("extra", ""),
     log:
         "summary_report/{sample}_{type}.output.log",
     benchmark:
@@ -25,6 +23,8 @@ rule summary_report:
             "summary_report/{sample}_{type}.output.benchmark.tsv",
             config.get("summary_report", {}).get("benchmark_repeats", 1),
         )
+    container:
+        config.get("summary_report", {}).get("container", config["default_container"])
     threads: config.get("summary_report", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("summary_report", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -32,8 +32,8 @@ rule summary_report:
         partition=config.get("summary_report", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("summary_report", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("summary_report", {}).get("time", config["default_resources"]["time"]),
-    container:
-        config.get("summary_report", {}).get("container", config["default_container"])
+    params:
+        extra=config.get("summary_report", {}).get("extra", ""),
     message:
         "{rule}: Summarize {input.vcf} results in {output.xlsx}"
     script:
