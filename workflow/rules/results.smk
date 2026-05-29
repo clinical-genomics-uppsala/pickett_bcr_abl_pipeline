@@ -51,9 +51,9 @@ def generate_copy_rules(output_spec):
                 f'@workflow.output("{output_file}")',
                 f'@workflow.log("logs/{rule_name}_{output_file.name}.log")',
                 f'@workflow.container("{copy_container}")',
-                f'@workflow.resources(time="{time}", threads={threads}, mem_mb={mem_mb}, '
+                f'@workflow.resources(time="{time}", threads={threads}, mem_mb="{mem_mb}", '
                 f'mem_per_cpu={mem_per_cpu}, partition="{partition}")',
-                f'@workflow.shellcmd("{copy_container}")',
+                f'@workflow.shellcmd("(cp {{input[0]}} {{output[0]}}) &> {{log}}")',
                 "@workflow.run\n",
                 f"def __rule_{rule_name}(input, output, params, wildcards, threads, resources, "
                 "log, version, rule, conda_env, container_img, singularity_args, use_singularity, "
