@@ -55,6 +55,14 @@ Fluffy, Poppy, Neville, Hastings, Marple, Poirot, and GMS560/GMSprio. That file
 is the handoff point between start-script harmonization and a future
 manifest-driven pack/unpack command.
 
+The Marvin library scan is captured in:
+
+- `docs/marvin_library_manifest.json`: full dry-run manifest for 352 likely
+  library assets across 12 active Marvin pipeline groups.
+- `docs/marvin_library_common.tsv`: compact table of assets shared by multiple
+  pipeline groups, useful for prioritizing the first physical `cgu/library`
+  copy/verification pass.
+
 The wrappers intentionally do not clone repositories during an analysis run.
 They require installed pipeline/config versions to exist and fail early with a
 clear preflight error if something is missing. This makes failed runs easier to
