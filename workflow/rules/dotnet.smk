@@ -37,7 +37,8 @@ rule dotnet_pisces:
     shell:
         "REF_FOLDER=`dirname {input.fasta}` && "
         "OUTPUT_FOLDER=`dirname {output.vcf}` && "
-        "(dotnet /app/Pisces/Pisces.dll "
+        "(export LC_ALL=C && "
+        "dotnet /app/Pisces/Pisces.dll "
         "-b {input.bam} "
         "-g $REF_FOLDER "
         "-i {input.bed} "
@@ -45,3 +46,4 @@ rule dotnet_pisces:
         "--outfolder $OUTPUT_FOLDER "
         "{params.extra}) "
         "&> {log}"
+
