@@ -32,4 +32,6 @@ rule bcftools_reheader:
         "{rule}: Rename sample in snv_indels/pisces/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.bad_name.vcf"
     shell:
         "echo {wildcards.sample}_{wildcards.type} > {output.samplename} && "
-        "(bcftools reheader -s {output.samplename} -o {output.vcf} {input.vcf} ) &> {log}"
+        "sed 's/∞/99999/g' {input.vcf} > {output.vcf}.tmp && "
+        "(bcftools reheader -s {output.samplename} -o {output.vcf} {output.vcf}.tmp ) &> {log} && "
+        "rm {output.vcf}.tmp"
