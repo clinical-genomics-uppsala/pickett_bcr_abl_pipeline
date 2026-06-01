@@ -35,3 +35,4 @@ rule bcftools_reheader:
         "python3 -c 'import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().replace(bytes.fromhex(\"e2889e\"), b\"99999\"))' < {input.vcf} > {output.vcf}.tmp && "
         "(bcftools reheader -s {output.samplename} -o {output.vcf} {output.vcf}.tmp ) &> {log} && "
         "rm {output.vcf}.tmp"
+
