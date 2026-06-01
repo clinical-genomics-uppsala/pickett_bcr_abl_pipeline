@@ -47,3 +47,4 @@ rule dotnet_pisces:
         "--outfolder $OUTPUT_FOLDER "
         "{params.extra}) "
         "&> {log}"
+
