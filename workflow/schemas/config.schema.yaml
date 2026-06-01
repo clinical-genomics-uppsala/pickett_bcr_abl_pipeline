@@ -28,6 +28,9 @@ properties:
       fai: 
         type: string
         description: fasta reference genome_index
+      genomesize_xml:
+        type: string
+        description: required by Pisces variant caller
       design_bed:
         type: string
         description: bedfile of capture design

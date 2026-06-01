@@ -11,6 +11,11 @@ reference:
     type: file
     url: file:/data/ref_genomes/hg19/genome_fasta/hg19.with.mt.fasta.fai
     checksum: 6071b578df509d097874b3e58a1a9fc6
+  genomesize_xml:
+    path: pickett/GenomeSize.xml
+    type: file
+    url: file:/data/ref_genomes/hg19/genome_fasta/GenomeSize.xml
+    checksum: d41d8cd98f00b204e9800998ecf8427e
   design_bed:
     path: pickett/annotations_hg19/bcr_abl1.bed
     type: file

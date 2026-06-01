@@ -27,6 +27,7 @@ reference:
   genome_dir: "{{REFERENCE_DATA}}/" # req by align not used
   fasta: "{{REFERENCE_DATA}}/hg19.with.mt.fasta"
   fai: "{{REFERENCE_DATA}}/hg19.with.mt.fasta.fai"
+  genomesize_xml: "{{REFERENCE_DATA}}/GenomeSize.xml"
   design_bed: "{{ANNOTATIONS}}/bcr_abl1.bed"
   background: "{{REFERENCE_DATA}}/background_panel.tsv"
   skip_chrs:
