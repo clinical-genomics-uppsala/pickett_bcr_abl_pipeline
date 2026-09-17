@@ -5,3 +5,7 @@ output: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/output_files_backgroun
 
 dotnet_pisces:
   extra: "--gvcf TRUE --filterduplicates TRUE"
+
+create_background_file:
+  min_dp: 500
+  max_af: 0.005

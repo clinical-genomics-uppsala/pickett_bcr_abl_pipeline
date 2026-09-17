@@ -66,6 +66,7 @@ Reference files are split between the shared pipeline config and the cluster-spe
 - [`config/site_configs/site_config_miarka.yaml`](config/site_configs/site_config_miarka.yaml)
 - [`config/site_configs/site_config_marvin.yaml`](config/site_configs/site_config_marvin.yaml)
 - `.fasta` reference file
+- `GenomeSize.xml` in the same reference directory for Pisces
 -  `.gtf`  reference file
 - A design file,`.bed` over entire genes
 - List of positions of interests (e.g. Branford list) in bedformat
@@ -97,7 +98,7 @@ $> snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.ya
 To run the workflow [`resources.yaml`](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/blob/master/config/resources.yaml) is needed together with a [snakemake profile](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/blob/master/snakemake_profile/config.yaml). 
 
 ```bash
-$> snakemake --profile path_to_snakemake_profile/ -s workflow/Snakefile --configfile config.yaml --config PAH_TO_REPO=/path/to/repo
+$> snakemake --profile path_to_snakemake_profile/ -s workflow/Snakefile --configfile config.yaml --config PATH_TO_REPO=/path/to/repo
 ```
 > **_NOTE:_**  If using the variable `PATH_TO_REPO` in the config-file this need to be defined in the commandline
     

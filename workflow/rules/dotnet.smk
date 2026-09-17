@@ -9,6 +9,7 @@ rule dotnet_pisces:
         bam="alignment/samtools_extract_reads/{sample}_{type}_{chr}.bam",
         bai="alignment/samtools_extract_reads/{sample}_{type}_{chr}.bam.bai",
         fasta=config.get("reference", {}).get("fasta", ""),
+        genomesize_xml=config["reference"]["genomesize_xml"],
         bed="snv_indels/bed_split/design_bedfile_{chr}.bed",
     output:
         vcf=temp("snv_indels/pisces/{sample}_{type}_{chr}_bad_name/{sample}_{type}_{chr}.vcf"),
@@ -37,7 +38,8 @@ rule dotnet_pisces:
     shell:
         "REF_FOLDER=`dirname {input.fasta}` && "
         "OUTPUT_FOLDER=`dirname {output.vcf}` && "
-        "(dotnet /app/Pisces/Pisces.dll "
+        "(export LC_ALL=C && "
+        "dotnet /app/Pisces/Pisces.dll "
         "-b {input.bam} "
         "-g $REF_FOLDER "
         "-i {input.bed} "

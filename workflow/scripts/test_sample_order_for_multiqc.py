@@ -37,3 +37,35 @@ def test_sample_order_for_multiqc_sorts_and_deduplicates(tmp_path):
         "sample_001\tSAMPLE_A",
         "sample_002\tSAMPLE_B",
     ]
+
+
+def test_sample_order_for_multiqc_handles_missing_index_and_ties(tmp_path):
+    replacement = tmp_path / "sample_replacement.tsv"
+    order = tmp_path / "sample_order.tsv"
+
+    fake_snakemake = SimpleNamespace(
+        params=SimpleNamespace(
+            filelist=[
+                ("SAMPLE_Z", "/data/SAMPLE_Z_R1.fastq.gz"),
+                ("SAMPLE_Y", "/data/SAMPLE_Y_R1.fastq.gz"),
+                ("SAMPLE_A", "/data/SAMPLE_A_S1_L001_R1.fastq.gz"),
+                ("SAMPLE_B", "/data/SAMPLE_B_S100_L001_R1.fastq.gz"),
+            ]
+        ),
+        output=SimpleNamespace(
+            replacement=str(replacement),
+            order=str(order),
+        ),
+    )
+
+    runpy.run_path(
+        "workflow/scripts/sample_order_for_multiqc.py",
+        init_globals={"snakemake": fake_snakemake},
+    )
+
+    assert replacement.read_text().splitlines() == [
+        "SAMPLE_A\tsample_001",
+        "SAMPLE_B\tsample_002",
+        "SAMPLE_Y\tsample_003",
+        "SAMPLE_Z\tsample_004",
+    ]

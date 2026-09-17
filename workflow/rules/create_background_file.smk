@@ -27,8 +27,8 @@ rule create_background_file:
         threads=config.get("create_background_file", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("create_background_file", {}).get("time", config["default_resources"]["time"]),
     params:
-        min_dp=config.get("create_artifact_file", {}).get("min_dp", 500),
-        max_af=config.get("create_artifact_file", {}).get("max_af", 0.05),
+        min_dp=config.get("create_background_file", {}).get("min_dp", 500),
+        max_af=config.get("create_background_file", {}).get("max_af", 0.005),
     message:
         "{rule}: create background PoN"
     script:
