@@ -118,12 +118,16 @@ rseqc_inner_distance:
 
 star:
   container: '{{APPTAINER_CACHE}}/hydragenetics_star_2.7.10a.sif'
-  genome_index: "{{REFERENCE_DATA}}/star_index_v2.7.10a_hg19/"
+  # Hydra preserves the archive's top-level v2.7.10a_hg19 directory below
+  # the registry destination directory.
+  genome_index: "{{REFERENCE_DATA}}/star_index_v2.7.10a_hg19/v2.7.10a_hg19/"
   extra: "--outSAMmapqUnique 60 --quantMode GeneCounts --sjdbGTFfile {{REFERENCE_DATA}}/hg19.refGene.gtf --outSAMtype BAM SortedByCoordinate --chimSegmentMin 10 --chimOutType WithinBAM SoftClip --chimJunctionOverhangMin 10 --chimScoreMin 1 --chimScoreDropMax 30 --chimScoreJunctionNonGTAG 0 --chimScoreSeparation 1 --alignSJstitchMismatchNmax 5 -1 5 5 --chimSegmentReadGapMax 3"
 
 star_fusion:
   container: '{{APPTAINER_CACHE}}/hydragenetics_star-fusion_1.10.1.sif'
-  genome_path: "{{REFERENCE_DATA}}/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/"
+  # The source archive contains data/ref_data/star-fusion as its top-level
+  # hierarchy; Hydra keeps that hierarchy when extracting the folder.
+  genome_path: "{{REFERENCE_DATA}}/star-fusion/data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/"
 
 summary_report:
   branford: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"

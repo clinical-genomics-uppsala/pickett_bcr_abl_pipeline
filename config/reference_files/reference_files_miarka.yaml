@@ -11,6 +11,11 @@ reference:
     type: file
     url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/hg19.with.mt.fasta.fai
     checksum: 6071b578df509d097874b3e58a1a9fc6
+  genomesize_xml:
+    path: pickett/GenomeSize.xml
+    type: file
+    url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/GenomeSize.xml
+    checksum: d41d8cd98f00b204e9800998ecf8427e
   design_bed:
     path: pickett/annotations_hg19/bcr_abl1.bed
     type: file
@@ -34,7 +39,7 @@ reference:
 
 star_reference:
   genome_dir:
-    path: pickett/v2.7.10a_hg19.tar.gz
+    path: pickett/star_index_v2.7.10a_hg19
     compressed_checksum: 12153681d1430a202b9f4eacff0016f7
     type: folder
     url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/v2.7.10a_hg19.tar.gz
@@ -75,7 +80,7 @@ arriba_draw_fusion:
     url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/cytobands_hg19_hs37d5_GRCh37_v2.3.0.tsv
 
 fusioncatcher_files:
-  path: pickett/human_v102.tar.gz
+  path: pickett/fusioncatcher
   compressed_checksum: 2dc3e314cd1fe721be12bc30aa1b866e
   type: folder
   url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/human_v102.tar.gz
@@ -105,14 +110,13 @@ summary_report:
   url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/annotations_hg19/branford_SNVs_230118.bed
 
 output:
-  output_files:
   path: pickett/output_files.yaml
   checksum: c587387f83632432e69503568e6de6cd
   type: file
   url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/pickett_bcr_abl_pipeline/config/output_files.yaml
 
 star_fusion:
-  path: pickett/star-fusion.tar.gz
+  path: pickett/star-fusion
   compressed_checksum: 6c3de3e42143bd77829308292bbf31da
   type: folder
   url: file:/proj/ngi2024001/nobackup/bin/wp2_abl/design_and_ref_files/pickett/star-fusion_GRCh37.tar.gz
