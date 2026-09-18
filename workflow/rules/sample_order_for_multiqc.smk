@@ -8,14 +8,15 @@ rule sample_order_for_multiqc:
     output:
         replacement="qc/multiqc/sample_replacement.tsv",
         order="qc/multiqc/sample_order.tsv",
-    params:
-        filelist=[(u.sample, u.fastq1) for u in units[units.type == "R"].itertuples()],
     log:
         "qc/multiqc/sample_order.tsv.log",
     benchmark:
         repeat(
-            "qc/multiqc/sample_order.tsv.benchmark.tsv", config.get("sample_order_for_multiqc", {}).get("benchmark_repeats", 1)
+            "qc/multiqc/sample_order.tsv.benchmark.tsv",
+            config.get("sample_order_for_multiqc", {}).get("benchmark_repeats", 1),
         )
+    container:
+        config.get("sample_order_for_multiqc", {}).get("container", config["default_container"])
     threads: config.get("sample_order_for_multiqc", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("sample_order_for_multiqc", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -23,8 +24,8 @@ rule sample_order_for_multiqc:
         partition=config.get("sample_order_for_multiqc", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("sample_order_for_multiqc", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("sample_order_for_multiqc", {}).get("time", config["default_resources"]["time"]),
-    container:
-        config.get("sample_order_for_multiqc", {}).get("container", config["default_container"])
+    params:
+        filelist=[(u.sample, u.fastq1) for u in units[units.type == "R"].itertuples()],
     message:
         "{rule}: Create a sample order tsv based on S_index in {params.filelist} for multiqc"
     script:

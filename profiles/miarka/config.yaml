@@ -1,0 +1,12 @@
+jobs: 200
+keep-going: true
+restart-times: 1
+rerun-incomplete: true
+max-jobs-per-second: 100
+max-status-checks-per-second: 100
+use-singularity: true
+drmaa: "-p {resources.partition} -t {resources.time} -n {resources.threads} --mem={resources.mem_mb} --mem-per-cpu={resources.mem_per_cpu} -J {rule} -A ngi2024001 -e slurm/{rule}*%j.err -o slurm/{rule}*%j.out --nodes=1-1"
+drmaa-log-dir: slurm
+singularity-args: "--cleanenv -B /proj -B $TMPDIR:/tmp --nv"
+singularity-prefix: "/proj/ngi2024001/nobackup/bin/wp2_abl/apptainer_cache/"
+wrapper-prefix: "git+file:///proj/ngi2024001/nobackup/bin/wp2_abl/snakemake-wrappers/"

@@ -6,7 +6,7 @@ files:
     output: "{sample}_R/{sample}_R.merged.vcf.gz"
 
   - name: tbi file
-    input: null
+    input: "snv_indels/pisces/{sample}_R.merged.vcf.gz.tbi"
     output: "{sample}_R/{sample}_R.merged.vcf.gz.tbi"
 
   - name: reference tsv-file

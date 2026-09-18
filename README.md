@@ -59,8 +59,14 @@ The following information need to be added to these files:
 | adapter | adapter sequences to be trimmed, separated by comma |
 
 ### Reference data
-Reference files should be specified in [`config.yaml`](config/config.yaml)
+Reference files are split between the shared pipeline config and the cluster-specific registries:
+- [`config/config.yaml`](config/config.yaml)
+- [`config/reference_files/reference_files_miarka.yaml`](config/reference_files/reference_files_miarka.yaml)
+- [`config/reference_files/reference_files_marvin.yaml`](config/reference_files/reference_files_marvin.yaml)
+- [`config/site_configs/site_config_miarka.yaml`](config/site_configs/site_config_miarka.yaml)
+- [`config/site_configs/site_config_marvin.yaml`](config/site_configs/site_config_marvin.yaml)
 - `.fasta` reference file
+- `GenomeSize.xml` in the same reference directory for Pisces
 -  `.gtf`  reference file
 - A design file,`.bed` over entire genes
 - List of positions of interests (e.g. Branford list) in bedformat
@@ -73,7 +79,7 @@ Reference files should be specified in [`config.yaml`](config/config.yaml)
  - Background-file to annotate calls with (see more [below](#backgroundreference-pipeline))
 
 ### Containers
-All containers but one are available on [Dockerhub](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/blob/master/config/config.yaml). For variantcalling a container with [Illumina Pisces](https://github.com/Illumina/Pisces) v5.2.11 is needed.
+Most containers are declared in [`config/config.yaml`](config/config.yaml). For variant calling, a container with [Illumina Pisces](https://github.com/Illumina/Pisces) v5.2.11 is needed.
 
 ## :white_check_mark: Testing
 
@@ -84,13 +90,15 @@ $> cd .tests/integration
 $> snakemake -n -s ../../workflow/Snakefile --configfiles ../../config/config.yaml config.yaml --config PATH_TO_REPO=/path/to/repo/
 ```
 > **_NOTE:_**   If using the variable `PATH_TO_REPO` (folder containing `pickett_bcr_abl_pipeline`) in the config-file this need to be defined in the commandline
+> For cluster-specific runs, the launcher script selects the correct `site_config.yaml` and `reference_files.yaml` automatically.
+> If you run Snakemake directly, include the matching site config for the target cluster.
 
 ## :rocket: Usage
 
 To run the workflow [`resources.yaml`](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/blob/master/config/resources.yaml) is needed together with a [snakemake profile](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/blob/master/snakemake_profile/config.yaml). 
 
 ```bash
-$> snakemake --profile path_to_snakemake_profile/ -s workflow/Snakefile --configfile config.yaml --config PAH_TO_REPO=/path/to/repo
+$> snakemake --profile path_to_snakemake_profile/ -s workflow/Snakefile --configfile config.yaml --config PATH_TO_REPO=/path/to/repo
 ```
 > **_NOTE:_**  If using the variable `PATH_TO_REPO` in the config-file this need to be defined in the commandline
     

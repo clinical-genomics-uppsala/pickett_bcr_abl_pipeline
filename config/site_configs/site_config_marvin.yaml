@@ -1,0 +1,4 @@
+# Marvin site config for runtime paths and local tool locations.
+REFERENCE_DATA: /projects/bin/wp2_abl/design_and_ref_files/pickett
+APPTAINER_CACHE: /projects/bin/wp2_abl/apptainer_cache
+hydra_local_path: /projects/bin/wp2_abl/hydra-genetics
