@@ -7,20 +7,18 @@ package_version=""
 output_dir="$(pwd)/build-output"
 python_version="3.9"
 container_source="/projects/bin/wp2_abl/apptainer_cache"
-profile_source=""
 start_scripts_repo="https://github.com/clinical-genomics-uppsala/pipeline_start_scripts.git"
 start_scripts_ref="pickett"
 keep_build=false
 
 usage() {
     cat <<EOF
-Usage: $(basename "$0") --package-version VERSION --profile-dir DIR [options]
+Usage: $(basename "$0") --package-version VERSION [options]
 
 Build a complete Pickett package on Marvin for installation on Miarka.
 
 Required:
   --package-version VERSION  Installation directory name, for example v0.3.0.
-  --profile-dir DIR          Miarka Snakemake profile containing config.yaml.
 
 Options:
   --pipeline-ref REF         Git tag, branch or commit to package. Default: Miarka.
@@ -53,11 +51,6 @@ while [[ $# -gt 0 ]]; do
         --package-version)
             require_option_value "$1" "${2:-}"
             package_version="$2"
-            shift 2
-            ;;
-        --profile-dir)
-            require_option_value "$1" "${2:-}"
-            profile_source="$2"
             shift 2
             ;;
         --pipeline-ref)
@@ -107,8 +100,6 @@ done
 
 [[ -n "$package_version" ]] || { usage; die "--package-version is required"; }
 [[ "$package_version" =~ ^[A-Za-z0-9._-]+$ ]] || die "Invalid package version: $package_version"
-[[ -n "$profile_source" ]] || { usage; die "--profile-dir is required"; }
-[[ -f "${profile_source%/}/config.yaml" ]] || die "Profile config missing: ${profile_source%/}/config.yaml"
 [[ -d "$container_source" ]] || die "Container cache missing: $container_source"
 
 for command in git conda conda-pack tar python3 sha256sum; do
@@ -177,10 +168,13 @@ for module, revision in config["modules"].items():
 PY
 )
 
+profile_source="${pipeline_path}/profiles/miarka"
+[[ -f "${profile_source}/config.yaml" ]] || die "Miarka profile missing: ${profile_source}/config.yaml"
+
 echo "Cloning Snakemake wrappers and packaging the Miarka profile"
 git clone https://github.com/snakemake/snakemake-wrappers.git \
     "${package_root}/snakemake-wrappers"
-cp -a "${profile_source%/}/." "${package_root}/snakemake-profiles/"
+cp -a "${profile_source}/." "${package_root}/snakemake-profiles/"
 
 start_scripts_checkout="${build_root}/pipeline_start_scripts"
 git clone "$start_scripts_repo" "$start_scripts_checkout"

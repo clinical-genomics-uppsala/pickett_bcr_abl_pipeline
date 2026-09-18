@@ -5,9 +5,6 @@ container images are available. The resulting archive contains the pipeline,
 a relocatable Python environment, pinned Hydra modules, Snakemake wrappers,
 the Miarka profile, containers, references and the Miarka launcher.
 
-The Miarka profile is deliberately supplied explicitly because it is currently
-installed outside the pipeline repository.
-
 The pipeline itself is cloned by the build script into a temporary directory;
 it does not need to be installed below `/projects/bin/wp2_abl` first. Local
 pipeline-owned reference URLs are rewritten to that temporary checkout during
@@ -20,7 +17,6 @@ module load miniconda3
 bash build/build_pickett_package.sh \
   --pipeline-ref Miarka \
   --package-version v0.3.0-rc1 \
-  --profile-dir /path/on/marvin/to/miarka-snakemake-profile \
   --output-dir "$PWD/build-output"
 ```
 

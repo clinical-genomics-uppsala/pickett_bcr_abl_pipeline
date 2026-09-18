@@ -65,6 +65,8 @@ def main():
         config_file,
         registry_file,
         pipeline / "workflow/Snakefile",
+        pipeline / "profiles/marvin/config.yaml",
+        pipeline / "profiles/miarka/config.yaml",
         root / args.version / "venv_pickett/bin/hydra-genetics",
         root / args.version / "venv_pickett/bin/snakemake",
         root / "snakemake-profiles/config.yaml",
@@ -83,6 +85,22 @@ def main():
             errors,
             f"config PIPELINE_VERSION is {config.get('PIPELINE_VERSION')}, expected {args.version}",
         )
+
+    for site in ("marvin", "miarka"):
+        profile = yaml.safe_load(
+            (pipeline / "profiles" / site / "config.yaml").read_text()
+        )
+        if "snakefile" in profile:
+            fail(errors, f"profiles/{site}/config.yaml must not pin a Snakefile path")
+        wrapper_prefix = profile.get("wrapper-prefix", "")
+        if not wrapper_prefix.startswith("git+file:///"):
+            fail(errors, f"profiles/{site}/config.yaml has a non-local wrapper-prefix")
+
+    site_config = yaml.safe_load(
+        (pipeline / "config/site_configs/site_config_marvin.yaml").read_text()
+    )
+    if "hydra_local_path" not in site_config:
+        fail(errors, "Marvin site config must define hydra_local_path for offline runs")
 
     # Validate every registry target and all declared checksums.
     for name, entry in registry_entries(registry):
