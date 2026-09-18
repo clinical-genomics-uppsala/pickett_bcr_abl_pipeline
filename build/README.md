@@ -8,6 +8,12 @@ the Miarka profile, containers, references and the Miarka launcher.
 The Miarka profile is deliberately supplied explicitly because it is currently
 installed outside the pipeline repository.
 
+The pipeline itself is cloned by the build script into a temporary directory;
+it does not need to be installed below `/projects/bin/wp2_abl` first. Local
+pipeline-owned reference URLs are rewritten to that temporary checkout during
+the build. The external reference sources under `/data`, `/scratch` and
+`/projects/wp2` and the container cache still need to be readable on Marvin.
+
 ```bash
 module load miniconda3
 

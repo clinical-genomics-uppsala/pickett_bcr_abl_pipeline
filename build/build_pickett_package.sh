@@ -217,9 +217,29 @@ launcher_path.write_text(launcher)
 PY
 
 echo "Downloading and validating references with Hydra Genetics"
+build_reference_config="${build_root}/reference_files_marvin.yaml"
+"${environment_path}/bin/python" - \
+    "${pipeline_path}/config/reference_files/reference_files_marvin.yaml" \
+    "$pipeline_path" \
+    "$build_reference_config" <<'PY'
+import pathlib
+import sys
+
+source = pathlib.Path(sys.argv[1])
+pipeline_path = pathlib.Path(sys.argv[2]).resolve()
+destination = pathlib.Path(sys.argv[3])
+
+content = source.read_text()
+old_pipeline_url = (
+    "file:/projects/bin/wp2_abl/pickett_bcr_abl/"
+    "v0.2.2/pickett_bcr_abl_pipeline"
+)
+content = content.replace(old_pipeline_url, pipeline_path.as_uri())
+destination.write_text(content)
+PY
 "${environment_path}/bin/hydra-genetics" --debug references download \
     -o "${package_root}/design_and_ref_files" \
-    -v "${pipeline_path}/config/reference_files/reference_files_marvin.yaml"
+    -v "$build_reference_config"
 
 echo "Copying the exact container images required by config.yaml"
 while IFS= read -r container_name; do
