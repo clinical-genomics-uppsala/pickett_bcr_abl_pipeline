@@ -26,7 +26,9 @@ and use the same release name for `--package-version`.
 
 The build refuses to continue if a required reference, checksum, module
 revision, profile or container is missing. Existing output archives are never
-overwritten.
+overwritten. Local reference sources are checked for existence and read access
+before the Python environment or large reference trees are built; Hydra then
+performs the checksum validation while materializing the references.
 
 ## Install on Miarka
 

@@ -154,6 +154,51 @@ git clone --no-checkout "$pipeline_repo" "$pipeline_path"
 checkout_detached_ref "$pipeline_path" "$pipeline_ref"
 pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
 
+build_reference_config="${build_root}/reference_files_marvin.yaml"
+python3 - \
+    "${pipeline_path}/config/reference_files/reference_files_marvin.yaml" \
+    "$pipeline_path" \
+    "$build_reference_config" <<'PY'
+import pathlib
+import sys
+
+source = pathlib.Path(sys.argv[1])
+pipeline_path = pathlib.Path(sys.argv[2]).resolve()
+destination = pathlib.Path(sys.argv[3])
+
+content = source.read_text()
+old_pipeline_url = (
+    "file:/projects/bin/wp2_abl/pickett_bcr_abl/"
+    "v0.2.2/pickett_bcr_abl_pipeline"
+)
+content = content.replace(old_pipeline_url, pipeline_path.as_uri())
+destination.write_text(content)
+PY
+
+echo "Checking local reference sources"
+python3 - "$build_reference_config" <<'PY'
+import os
+import pathlib
+import re
+import sys
+from urllib.parse import unquote, urlparse
+
+registry = pathlib.Path(sys.argv[1]).read_text()
+urls = sorted(set(re.findall(r"(?m)^\s*url:\s*(file:[^\s#]+)", registry)))
+missing = []
+for url in urls:
+    path = pathlib.Path(unquote(urlparse(url).path))
+    if not path.is_file() or not os.access(path, os.R_OK):
+        missing.append(path)
+
+if missing:
+    for path in missing:
+        print(f"ERROR: Reference source missing or unreadable: {path}", file=sys.stderr)
+    raise SystemExit(1)
+
+print(f"Reference source preflight passed: {len(urls)} local files")
+PY
+
 echo "Creating relocatable Python environment"
 eval "$(conda shell.bash hook)"
 conda create --prefix "$environment_path" "python=${python_version}" pip -y
@@ -211,26 +256,6 @@ config_path.write_text(config)
 PY
 
 echo "Downloading and validating references with Hydra Genetics"
-build_reference_config="${build_root}/reference_files_marvin.yaml"
-"${environment_path}/bin/python" - \
-    "${pipeline_path}/config/reference_files/reference_files_marvin.yaml" \
-    "$pipeline_path" \
-    "$build_reference_config" <<'PY'
-import pathlib
-import sys
-
-source = pathlib.Path(sys.argv[1])
-pipeline_path = pathlib.Path(sys.argv[2]).resolve()
-destination = pathlib.Path(sys.argv[3])
-
-content = source.read_text()
-old_pipeline_url = (
-    "file:/projects/bin/wp2_abl/pickett_bcr_abl/"
-    "v0.2.2/pickett_bcr_abl_pipeline"
-)
-content = content.replace(old_pipeline_url, pipeline_path.as_uri())
-destination.write_text(content)
-PY
 "${environment_path}/bin/hydra-genetics" --debug references download \
     -o "${package_root}/design_and_ref_files" \
     -v "$build_reference_config"
