@@ -136,7 +136,9 @@ mkdir -p \
     "${package_root}/start_scripts/miarka"
 
 pipeline_path="${package_root}/${package_version}/pickett_bcr_abl_pipeline"
-git clone "$pipeline_repo" "$pipeline_path"
+# Fetch the repository without checking out its default branch.  The requested
+# ref may be a branch, tag, or commit, so resolve it explicitly below.
+git clone --no-checkout "$pipeline_repo" "$pipeline_path"
 git -C "$pipeline_path" checkout --detach "$pipeline_ref"
 pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
 
@@ -177,7 +179,9 @@ git clone https://github.com/snakemake/snakemake-wrappers.git \
 cp -a "${profile_source}/." "${package_root}/snakemake-profiles/"
 
 start_scripts_checkout="${build_root}/pipeline_start_scripts"
-git clone "$start_scripts_repo" "$start_scripts_checkout"
+# Resolve the requested start-script ref separately for the same reason as the
+# pipeline ref above.
+git clone --no-checkout "$start_scripts_repo" "$start_scripts_checkout"
 git -C "$start_scripts_checkout" checkout --detach "$start_scripts_ref"
 cp "${start_scripts_checkout}/miarka/start_wp2_abl.sh" \
     "${package_root}/start_scripts/miarka/start_wp2_abl.sh"
