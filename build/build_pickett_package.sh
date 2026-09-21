@@ -12,7 +12,7 @@ package_version=""
 output_dir="$(pwd)/build-output"
 python_version="3.9"
 container_source="/projects/bin/wp2_abl/apptainer_cache"
-start_scripts_repo="https://github.com/clinical-genomics-uppsala/pipeline_start_scripts.git"
+start_scripts_repo="git@github.com:clinical-genomics-uppsala/pipeline_start_scripts.git"
 start_scripts_ref="pickett"
 keep_build=false
 
@@ -32,6 +32,8 @@ Options:
   --container-cache DIR      Working Marvin container cache.
                              Default: /projects/bin/wp2_abl/apptainer_cache.
   --python-version VERSION   Conda Python version. Default: 3.9.
+  --start-scripts-repo PATH  pipeline_start_scripts repository URL or local path.
+                             Default: GitHub over SSH.
   --start-scripts-ref REF    pipeline_start_scripts ref. Default: pickett.
   --keep-build               Preserve the temporary build directory.
   -h, --help                 Show this help.
@@ -104,6 +106,11 @@ while [[ $# -gt 0 ]]; do
             start_scripts_ref="$2"
             shift 2
             ;;
+        --start-scripts-repo)
+            require_option_value "$1" "${2:-}"
+            start_scripts_repo="$2"
+            shift 2
+            ;;
         --keep-build)
             keep_build=true
             shift
@@ -163,6 +170,10 @@ git clone --no-checkout "$pipeline_repo" "$pipeline_path"
 checkout_detached_ref "$pipeline_path" "$pipeline_ref"
 pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
 
+start_scripts_checkout="${build_root}/pipeline_start_scripts"
+git clone --no-checkout "$start_scripts_repo" "$start_scripts_checkout"
+checkout_detached_ref "$start_scripts_checkout" "$start_scripts_ref"
+
 echo "Creating relocatable Python environment"
 eval "$(conda shell.bash hook)"
 conda create --prefix "$environment_path" "python=${python_version}" pip -y
@@ -198,11 +209,6 @@ git clone https://github.com/snakemake/snakemake-wrappers.git \
     "${package_root}/snakemake-wrappers"
 cp -a "${profile_source}/." "${package_root}/snakemake-profiles/"
 
-start_scripts_checkout="${build_root}/pipeline_start_scripts"
-# Resolve the requested start-script ref separately for the same reason as the
-# pipeline ref above.
-git clone --no-checkout "$start_scripts_repo" "$start_scripts_checkout"
-checkout_detached_ref "$start_scripts_checkout" "$start_scripts_ref"
 cp "${start_scripts_checkout}/miarka/start_wp2_abl.sh" \
     "${package_root}/start_scripts/miarka/start_wp2_abl.sh"
 

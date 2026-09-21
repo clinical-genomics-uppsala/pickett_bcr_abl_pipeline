@@ -25,7 +25,12 @@ and use the same release name for `--package-version`.
 
 The build refuses to continue if a required reference, checksum, module
 revision, profile or container is missing. Existing output archives are never
-overwritten.
+overwritten. The private `pipeline_start_scripts` repository is cloned over
+SSH by default. To use an existing Marvin checkout instead, add for example:
+
+```bash
+  --start-scripts-repo "$HOME/pipeline_start_scripts"
+```
 
 ## Install on Miarka
 
