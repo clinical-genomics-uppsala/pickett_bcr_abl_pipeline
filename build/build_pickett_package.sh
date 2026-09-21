@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Do not let packages from the build user's ~/.local directory or PYTHONPATH
+# leak into the relocatable pipeline environment.
+export PYTHONNOUSERSITE=1
+unset PYTHONHOME PYTHONPATH PIP_PREFIX PIP_TARGET PIP_USER
+
 pipeline_repo="https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline.git"
 pipeline_ref="Miarka"
 package_version=""
@@ -161,8 +166,8 @@ pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
 echo "Creating relocatable Python environment"
 eval "$(conda shell.bash hook)"
 conda create --prefix "$environment_path" "python=${python_version}" pip -y
-"${environment_path}/bin/python" -m pip install --upgrade "pip<26" setuptools wheel
-"${environment_path}/bin/python" -m pip install -r "${pipeline_path}/requirements.txt"
+"${environment_path}/bin/python" -s -m pip install --upgrade "pip<26" setuptools wheel
+"${environment_path}/bin/python" -s -m pip install -r "${pipeline_path}/requirements.txt"
 
 packed_environment="${build_root}/venv_pickett.tar.gz"
 conda-pack --prefix "$environment_path" --output "$packed_environment"
