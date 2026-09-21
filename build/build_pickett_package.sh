@@ -166,7 +166,6 @@ pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
 echo "Creating relocatable Python environment"
 eval "$(conda shell.bash hook)"
 conda create --prefix "$environment_path" "python=${python_version}" pip -y
-"${environment_path}/bin/python" -s -m pip install --upgrade "pip<26" setuptools wheel
 "${environment_path}/bin/python" -s -m pip install -r "${pipeline_path}/requirements.txt"
 
 packed_environment="${build_root}/venv_pickett.tar.gz"
