@@ -15,7 +15,7 @@ reference:
     path: pickett/GenomeSize.xml
     type: file
     url: file:/data/ref_genomes/hg19/genome_fasta/GenomeSize.xml
-    checksum: d41d8cd98f00b204e9800998ecf8427e
+    checksum: 75adc2022af4deaabd7444d9d1d02c88
   design_bed:
     path: pickett/annotations_hg19/bcr_abl1.bed
     type: file

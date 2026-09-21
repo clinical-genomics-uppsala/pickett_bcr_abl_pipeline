@@ -14,7 +14,9 @@ def test_reference_registry_matches_hydra_folder_extraction_layout():
     config = load_yaml("config/config.yaml")
     registry = load_yaml("config/reference_files/reference_files_marvin.yaml")
 
-    assert registry["reference"]["genomesize_xml"]["path"] == "pickett/GenomeSize.xml"
+    genome_size = registry["reference"]["genomesize_xml"]
+    assert genome_size["path"] == "pickett/GenomeSize.xml"
+    assert genome_size["checksum"] == "75adc2022af4deaabd7444d9d1d02c88"
 
     star = registry["star_reference"]["genome_dir"]
     star_root = next(iter(star["content_checksum"])).split("/", 1)[0]
