@@ -10,6 +10,7 @@ pipeline_repo="https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipe
 pipeline_ref="Miarka"
 package_version=""
 output_dir="$(pwd)/build-output"
+work_dir="${TMPDIR:-/tmp}"
 python_version="3.9"
 container_source="/projects/bin/wp2_abl/apptainer_cache"
 keep_build=false
@@ -27,6 +28,8 @@ Options:
   --pipeline-ref REF         Git tag, branch or commit to package. Default: Miarka.
   --pipeline-repo URL        Pipeline repository URL.
   --output-dir DIR           Artifact directory. Default: ./build-output.
+  --work-dir DIR             Disk used for the temporary build tree and caches.
+                             Default: TMPDIR, or /tmp if TMPDIR is unset.
   --container-cache DIR      Working Marvin container cache.
                              Default: /projects/bin/wp2_abl/apptainer_cache.
   --python-version VERSION   Conda Python version. Default: 3.9.
@@ -86,6 +89,11 @@ while [[ $# -gt 0 ]]; do
             output_dir="$2"
             shift 2
             ;;
+        --work-dir)
+            require_option_value "$1" "${2:-}"
+            work_dir="$2"
+            shift 2
+            ;;
         --container-cache)
             require_option_value "$1" "${2:-}"
             container_source="$2"
@@ -121,14 +129,24 @@ done
 
 mkdir -p "$output_dir"
 output_dir="$(cd "$output_dir" && pwd)"
+mkdir -p "$work_dir"
+work_dir="$(cd "$work_dir" && pwd)"
+[[ -w "$work_dir" ]] || die "Work directory is not writable: $work_dir"
 archive="${output_dir}/pickett_${package_version}_miarka_offline.tar.gz"
 archive_checksum="${archive}.sha256"
 [[ ! -e "$archive" && ! -e "$archive_checksum" ]] || \
     die "Output already exists; move it or choose another --output-dir: $archive"
 
-build_root="$(mktemp -d "${TMPDIR:-/tmp}/pickett-package.XXXXXX")"
+build_root="$(mktemp -d "${work_dir}/pickett-package.XXXXXX")"
 package_root="${build_root}/package"
 environment_path="${build_root}/conda-env"
+runtime_tmp="${build_root}/tmp"
+mkdir -p "$runtime_tmp"
+export TMPDIR="$runtime_tmp"
+export TMP="$runtime_tmp"
+export TEMP="$runtime_tmp"
+export CONDA_PKGS_DIRS="${runtime_tmp}/conda-pkgs"
+export PIP_CACHE_DIR="${runtime_tmp}/pip-cache"
 
 cleanup() {
     if [[ "$keep_build" == true ]]; then
@@ -140,6 +158,7 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Building Pickett ${package_version} from ${pipeline_ref}"
+echo "Working directory: ${build_root}"
 mkdir -p \
     "${package_root}/${package_version}" \
     "${package_root}/hydra-genetics" \

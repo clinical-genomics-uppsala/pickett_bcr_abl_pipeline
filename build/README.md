@@ -18,8 +18,14 @@ module load miniconda3
 bash build/build_pickett_package.sh \
   --pipeline-ref Miarka \
   --package-version v0.3.0-rc1 \
+  --work-dir /projects/wp2/nobackup/pickett-build-work \
   --output-dir "$PWD/build-output"
 ```
+
+Choose a `--work-dir` on a filesystem with enough free space for the unpacked
+references, Python environment, containers and build caches. The script also
+directs Python, Hydra, conda and pip temporary data there. The filesystem used
+by `--output-dir` must separately have room for the final compressed archive.
 
 For the final release, use an immutable Git tag or commit for `--pipeline-ref`
 and use the same release name for `--package-version`.
