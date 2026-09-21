@@ -3,7 +3,8 @@
 Run the build on Marvin, where the source reference files and the tested
 container images are available. The resulting archive contains the pipeline,
 a relocatable Python environment, pinned Hydra modules, Snakemake wrappers,
-the Miarka profile, containers, references and the Miarka launcher.
+the Miarka profile, containers and references. The launcher remains separately
+versioned in `pipeline_start_scripts` and is not part of this package.
 
 The pipeline itself is cloned by the build script into a temporary directory;
 it does not need to be installed below `/projects/bin/wp2_abl` first. Local
@@ -25,12 +26,7 @@ and use the same release name for `--package-version`.
 
 The build refuses to continue if a required reference, checksum, module
 revision, profile or container is missing. Existing output archives are never
-overwritten. The private `pipeline_start_scripts` repository is cloned over
-SSH by default. To use an existing Marvin checkout instead, add for example:
-
-```bash
-  --start-scripts-repo "$HOME/pipeline_start_scripts"
-```
+overwritten.
 
 ## Install on Miarka
 
@@ -45,9 +41,8 @@ tar -xzf pickett_v0.3.0-rc1_miarka_offline.tar.gz -C "$INSTALL_ROOT"
 "$INSTALL_ROOT/v0.3.0-rc1/venv_pickett/bin/conda-unpack"
 ```
 
-For a completely new installation, copy the included launcher to the normal
-`pipeline_start_scripts/miarka` location. The packaged copy is found under
-`start_scripts/miarka/start_wp2_abl.sh`.
+Use the separately installed launcher from the `pipeline_start_scripts/miarka`
+directory.
 
 Smoke-test the installation before processing data:
 

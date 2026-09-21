@@ -12,8 +12,6 @@ package_version=""
 output_dir="$(pwd)/build-output"
 python_version="3.9"
 container_source="/projects/bin/wp2_abl/apptainer_cache"
-start_scripts_repo="git@github.com:clinical-genomics-uppsala/pipeline_start_scripts.git"
-start_scripts_ref="pickett"
 keep_build=false
 
 usage() {
@@ -32,9 +30,6 @@ Options:
   --container-cache DIR      Working Marvin container cache.
                              Default: /projects/bin/wp2_abl/apptainer_cache.
   --python-version VERSION   Conda Python version. Default: 3.9.
-  --start-scripts-repo PATH  pipeline_start_scripts repository URL or local path.
-                             Default: GitHub over SSH.
-  --start-scripts-ref REF    pipeline_start_scripts ref. Default: pickett.
   --keep-build               Preserve the temporary build directory.
   -h, --help                 Show this help.
 EOF
@@ -101,16 +96,6 @@ while [[ $# -gt 0 ]]; do
             python_version="$2"
             shift 2
             ;;
-        --start-scripts-ref)
-            require_option_value "$1" "${2:-}"
-            start_scripts_ref="$2"
-            shift 2
-            ;;
-        --start-scripts-repo)
-            require_option_value "$1" "${2:-}"
-            start_scripts_repo="$2"
-            shift 2
-            ;;
         --keep-build)
             keep_build=true
             shift
@@ -160,8 +145,7 @@ mkdir -p \
     "${package_root}/hydra-genetics" \
     "${package_root}/apptainer_cache" \
     "${package_root}/design_and_ref_files" \
-    "${package_root}/snakemake-profiles" \
-    "${package_root}/start_scripts/miarka"
+    "${package_root}/snakemake-profiles"
 
 pipeline_path="${package_root}/${package_version}/pickett_bcr_abl_pipeline"
 # Fetch the repository without checking out its default branch.  The requested
@@ -169,10 +153,6 @@ pipeline_path="${package_root}/${package_version}/pickett_bcr_abl_pipeline"
 git clone --no-checkout "$pipeline_repo" "$pipeline_path"
 checkout_detached_ref "$pipeline_path" "$pipeline_ref"
 pipeline_commit="$(git -C "$pipeline_path" rev-parse HEAD)"
-
-start_scripts_checkout="${build_root}/pipeline_start_scripts"
-git clone --no-checkout "$start_scripts_repo" "$start_scripts_checkout"
-checkout_detached_ref "$start_scripts_checkout" "$start_scripts_ref"
 
 echo "Creating relocatable Python environment"
 eval "$(conda shell.bash hook)"
@@ -209,35 +189,25 @@ git clone https://github.com/snakemake/snakemake-wrappers.git \
     "${package_root}/snakemake-wrappers"
 cp -a "${profile_source}/." "${package_root}/snakemake-profiles/"
 
-cp "${start_scripts_checkout}/miarka/start_wp2_abl.sh" \
-    "${package_root}/start_scripts/miarka/start_wp2_abl.sh"
-
-# Keep the packaged config and launcher self-identifying even when an RC is
-# built from a branch before the final release tag exists.
+# Keep the packaged config self-identifying even when an RC is built from a
+# branch before the final release tag exists.
 "${environment_path}/bin/python" - \
     "$package_version" \
-    "${pipeline_path}/config/config.yaml" \
-    "${package_root}/start_scripts/miarka/start_wp2_abl.sh" <<'PY'
+    "${pipeline_path}/config/config.yaml" <<'PY'
 import pathlib
 import re
 import sys
 
 version = sys.argv[1]
 config_path = pathlib.Path(sys.argv[2])
-launcher_path = pathlib.Path(sys.argv[3])
 
 config = config_path.read_text()
 config, config_count = re.subn(
     r"(?m)^PIPELINE_VERSION:.*$", f"PIPELINE_VERSION: {version}", config, count=1
 )
-launcher = launcher_path.read_text()
-launcher, launcher_count = re.subn(
-    r'(?m)^pickett_version="[^"]*"$', f'pickett_version="{version}"', launcher, count=1
-)
-if config_count != 1 or launcher_count != 1:
+if config_count != 1:
     raise SystemExit("Could not update packaged pipeline version")
 config_path.write_text(config)
-launcher_path.write_text(launcher)
 PY
 
 echo "Downloading and validating references with Hydra Genetics"
@@ -306,7 +276,6 @@ printf '%s\n' \
     "pipeline_ref=${pipeline_ref}" \
     "pipeline_commit=${pipeline_commit}" \
     "python_version=${python_version}" \
-    "start_scripts_ref=${start_scripts_ref}" \
     "created_utc=$(date -u '+%Y-%m-%dT%H:%M:%SZ')" \
     > "${package_root}/PACKAGE-METADATA.txt"
 
