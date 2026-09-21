@@ -14,6 +14,16 @@ def test_reference_registry_matches_hydra_folder_extraction_layout():
     config = load_yaml("config/config.yaml")
     registry = load_yaml("config/reference_files/reference_files_marvin.yaml")
 
+    def registry_urls(value):
+        if isinstance(value, dict):
+            for key, child in value.items():
+                if key == "url":
+                    yield child
+                else:
+                    yield from registry_urls(child)
+
+    assert all("/scratch/" not in url for url in registry_urls(registry))
+
     genome_size = registry["reference"]["genomesize_xml"]
     assert genome_size["path"] == "pickett/GenomeSize.xml"
     assert genome_size["checksum"] == "75adc2022af4deaabd7444d9d1d02c88"

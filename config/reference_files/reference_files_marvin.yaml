@@ -83,7 +83,7 @@ fusioncatcher_files:
   path: pickett/fusioncatcher
   compressed_checksum: 2dc3e314cd1fe721be12bc30aa1b866e
   type: folder
-  url: file:/scratch/picket_miarka_files/human_v102.tar.gz
+  url: file:/projects/wp2/nobackup/picket_miarka_files/human_v102.tar.gz
 
 mosdepth_bed:
   path: pickett/annotations_hg19/branford_SNVs_230118.bed
@@ -119,7 +119,7 @@ star_fusion:
   path: pickett/star-fusion
   compressed_checksum: 6c3de3e42143bd77829308292bbf31da
   type: folder
-  url: file:/scratch/picket_miarka_files/star-fusion_GRCh37.tar.gz
+  url: file:/projects/wp2/nobackup/picket_miarka_files/star-fusion_GRCh37.tar.gz
   content_checksum:
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58c9d71cd1f0e45668c5ec597
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.dat.gz: 6424901ec3e9c995b834c9d3259c0771

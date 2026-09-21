@@ -9,8 +9,8 @@ versioned in `pipeline_start_scripts` and is not part of this package.
 The pipeline itself is cloned by the build script into a temporary directory;
 it does not need to be installed below `/projects/bin/wp2_abl` first. Local
 pipeline-owned reference URLs are rewritten to that temporary checkout during
-the build. The external reference sources under `/data`, `/scratch` and
-`/projects/wp2` and the container cache still need to be readable on Marvin.
+the build. The external reference sources under `/data` and `/projects/wp2`
+and the container cache still need to be readable on Marvin.
 
 ```bash
 module load miniconda3
