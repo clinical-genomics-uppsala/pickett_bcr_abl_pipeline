@@ -155,8 +155,18 @@ fi
 
 archive="${output_dir}/pickett_${package_version}_miarka_offline.tar.gz"
 archive_checksum="${archive}.sha256"
-[[ ! -e "$archive" && ! -e "$archive_checksum" ]] || \
-    die "Output already exists; move it or choose another --output-dir: $archive"
+# A killed build leaves one of these behind without the other, so name the
+# files that are actually in the way rather than always blaming the archive.
+existing_output=""
+if [[ -e "$archive" ]]; then
+    existing_output="$archive"
+fi
+if [[ -e "$archive_checksum" ]]; then
+    existing_output="${existing_output:+${existing_output} }$archive_checksum"
+fi
+if [[ -n "$existing_output" ]]; then
+    die "Output already exists; remove it or choose another --output-dir: ${existing_output}"
+fi
 
 build_root="$(mktemp -d "${work_dir}/pickett-package.XXXXXX")"
 package_root="${build_root}/package"
