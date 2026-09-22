@@ -13,6 +13,7 @@ output_dir="$(pwd)/build-output"
 work_dir="${TMPDIR:-/tmp}"
 python_version="3.9"
 container_source="/projects/bin/wp2_abl/apptainer_cache"
+threads="${SLURM_CPUS_PER_TASK:-$(nproc 2>/dev/null || echo 1)}"
 keep_build=false
 
 usage() {
@@ -33,6 +34,9 @@ Options:
   --container-cache DIR      Working Marvin container cache.
                              Default: /projects/bin/wp2_abl/apptainer_cache.
   --python-version VERSION   Conda Python version. Default: 3.9.
+  --threads N                Threads used to compress the final archive.
+                             Default: SLURM_CPUS_PER_TASK, or all cores
+                             on the machine outside a Slurm allocation.
   --keep-build               Preserve the temporary build directory.
   -h, --help                 Show this help.
 EOF
@@ -104,6 +108,11 @@ while [[ $# -gt 0 ]]; do
             python_version="$2"
             shift 2
             ;;
+        --threads)
+            require_option_value "$1" "${2:-}"
+            threads="$2"
+            shift 2
+            ;;
         --keep-build)
             keep_build=true
             shift
@@ -122,6 +131,7 @@ done
 [[ -n "$package_version" ]] || { usage; die "--package-version is required"; }
 [[ "$package_version" =~ ^[A-Za-z0-9._-]+$ ]] || die "Invalid package version: $package_version"
 [[ -d "$container_source" ]] || die "Container cache missing: $container_source"
+[[ "$threads" =~ ^[1-9][0-9]*$ ]] || die "Invalid thread count: $threads"
 
 for command in git conda conda-pack tar python3 sha256sum; do
     require_command "$command"
@@ -132,6 +142,17 @@ output_dir="$(cd "$output_dir" && pwd)"
 mkdir -p "$work_dir"
 work_dir="$(cd "$work_dir" && pwd)"
 [[ -w "$work_dir" ]] || die "Work directory is not writable: $work_dir"
+# pigz writes ordinary gzip archives, so the artifact stays a .tar.gz that
+# plain `tar -xzf` unpacks on Miarka; only the build host needs pigz.
+if command -v pigz >/dev/null 2>&1; then
+    compressor="pigz -p ${threads}"
+else
+    compressor="gzip"
+    if [[ "$threads" -gt 1 ]]; then
+        echo "WARNING: pigz not found; compressing single-threaded with gzip" >&2
+    fi
+fi
+
 archive="${output_dir}/pickett_${package_version}_miarka_offline.tar.gz"
 archive_checksum="${archive}.sha256"
 [[ ! -e "$archive" && ! -e "$archive_checksum" ]] || \
@@ -329,8 +350,8 @@ echo "Writing package checksums"
     find . -type f ! -name SHA256SUMS -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
 )
 
-echo "Creating ${archive}"
-tar -czf "$archive" -C "$package_root" .
+echo "Creating ${archive} with ${compressor}"
+tar -c --use-compress-program="$compressor" -f "$archive" -C "$package_root" .
 (
     cd "$output_dir"
     sha256sum "$(basename "$archive")" > "$(basename "$archive_checksum")"

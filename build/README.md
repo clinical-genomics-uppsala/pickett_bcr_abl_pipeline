@@ -27,6 +27,34 @@ references, Python environment, containers and build caches. The script also
 directs Python, Hydra, conda and pip temporary data there. The filesystem used
 by `--output-dir` must separately have room for the final compressed archive.
 
+## Building under Slurm
+
+Most of the build is CPU and I/O bound, and compressing the archive dominates
+the wall clock. Submit the build instead of running it on the login node:
+
+```bash
+module load miniconda3
+
+sbatch -A wp2 -p core -n 16 -t 12:00:00 \
+  -J pickett-package -o pickett-package_%j.out \
+  --wrap "bash build/build_pickett_package.sh \
+    --pipeline-ref Miarka \
+    --package-version v0.3.0-rc1 \
+    --work-dir /projects/wp2/nobackup/pickett-build-work \
+    --output-dir /data/$USER/pickett-build/build-output"
+```
+
+`sbatch` exports the current environment by default, so load `miniconda3`
+before submitting. The build clones from GitHub and installs from PyPI, so the
+compute node needs outgoing network access.
+
+The archive is compressed with `pigz` across `--threads` cores, which defaults
+to `SLURM_CPUS_PER_TASK` inside an allocation and to every core on the machine
+outside one. This only changes how fast the archive is written: `pigz` produces
+an ordinary gzip stream, so the artifact stays a `.tar.gz` that plain
+`tar -xzf` unpacks on Miarka. If `pigz` is missing the script warns and falls
+back to single-threaded `gzip`.
+
 For the final release, use an immutable Git tag or commit for `--pipeline-ref`
 and use the same release name for `--package-version`.
 
