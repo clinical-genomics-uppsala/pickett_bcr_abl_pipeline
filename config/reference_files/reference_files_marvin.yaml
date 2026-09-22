@@ -121,7 +121,7 @@ star_fusion:
   type: folder
   url: file:/projects/wp2/nobackup/picket_miarka_files/star-fusion_GRCh37.tar.gz
   content_checksum:
-    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58c9d71cd1f0e45668c5ec597
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/AnnotFilterRule.pm: 5391fcc58d9c71cd1f0e45668c5ec597
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.dat.gz: 6424901ec3e9c995b834c9d3259c0771
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/blast_pairs.idx: b71d0e5cd71cf082d6e368d899d90b56
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/fusion_annot_lib.gz: b3e0a0ffaa8fc7853435c8a2397d366a
@@ -162,4 +162,4 @@ star_fusion:
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbInfo.txt: 2f354d28454bb54054831eed48fe41a0
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.fromGTF.out.tab: 1ec75ded0c18a68614ea379826fa6606
     data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/sjdbList.out.tab: d7cf96222857df81e87aa467149345ee
-    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/transcriptInfo.tab: a1bf060b944620b13c7330fb7f105cc9
+    data/ref_data/star-fusion/GRCh37_gencode_v19_CTAT_lib_Mar012021.plug-n-play/ctat_genome_lib_build_dir/ref_genome.fa.star.idx/transcriptInfo.tab: a1bf060b944620b13c7330fb7f105cc9
