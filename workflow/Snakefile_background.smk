@@ -24,6 +24,8 @@ use rule * from pipeline exclude all
 
 
 use rule bcftools_reheader from pipeline with:
+    wildcard_constraints:
+        chr="[^./]+",
     input:
         vcf="snv_indels/pisces/{sample}_{type}_{chr}_bad_name/{sample}_{type}_{chr}.genome.vcf",
 
