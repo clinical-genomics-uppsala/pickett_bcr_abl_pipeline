@@ -35,7 +35,7 @@ the wall clock. Submit the build instead of running it on the login node:
 ```bash
 module load miniconda3
 
-sbatch -A wp2 -p core -n 16 -t 12:00:00 \
+sbatch -A wp2 -p low_bkup -N 1 -n 1 -c 16 -t 12:00:00 \
   -J pickett-package -o pickett-package_%j.out \
   --wrap "bash build/build_pickett_package.sh \
     --pipeline-ref Miarka \
@@ -44,9 +44,21 @@ sbatch -A wp2 -p core -n 16 -t 12:00:00 \
     --output-dir /data/$USER/pickett-build/build-output"
 ```
 
-`sbatch` exports the current environment by default, so load `miniconda3`
-before submitting. The build clones from GitHub and installs from PyPI, so the
-compute node needs outgoing network access.
+Request the cores with `-c`, not `-n`. The build is one process that threads
+internally, and only `--cpus-per-task` both sets `SLURM_CPUS_PER_TASK` and
+keeps the cores on a single node. Asking for `-n 16` instead spreads 16 tasks
+over the partition and leaves the script compressing with whatever `nproc`
+reports on the batch node.
+
+Submit from the repository root, since `sbatch` runs the wrapped command in the
+submission directory. `sbatch` exports the current environment by default, so
+load `miniconda3` before submitting. The build clones from GitHub and installs
+from PyPI, so the compute node needs outgoing network access.
+
+A build that is killed rather than failed, by a timeout or by preemption on a
+low-priority partition, leaves a partial archive in `--output-dir` and a
+`pickett-package.*` directory in `--work-dir`. The script refuses to overwrite
+an existing archive, so remove both before resubmitting.
 
 The archive is compressed with `pigz` across `--threads` cores, which defaults
 to `SLURM_CPUS_PER_TASK` inside an allocation and to every core on the machine
