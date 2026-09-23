@@ -3,7 +3,7 @@ pipeline:
   id: wp2_abl
   name: pickett_bcr_abl_pipeline
   assay: bcr_abl
-  genome_build: GRCh38
+  genome_build: hg19
 
 entrypoints:
   analysis: workflow/Snakefile
@@ -53,3 +53,46 @@ harmonization_notes:
   - Keep output manifest and generated copy-rule logic in workflow/rules/results.smk.
   - Background generation is a real second entrypoint and should stay documented.
   - sample_order_for_multiqc.py overlaps with sample_order_multiqc.py naming in other pipelines.
+
+# Hur pipelinen startas av den gemensamma launchern
+# (pipeline_start_scripts/tools/launch.py, DECISIONS.md D13). Klusterfakta -
+# installationsrot, venv, drmaa-modul - står i startscriptens register, inte här.
+launch:
+  profile: profiles/{SITE}
+  snakefile: workflow/Snakefile
+  # Pickett läser sin config ur körkatalogens rot, inte ur config/.
+  copy:
+    - {from: config/config.yaml, to: config.yaml}
+    - {from: "config/reference_files/reference_files_{SITE}.yaml", to: reference_files.yaml}
+    - {from: config/resources.yaml, to: resources.yaml}
+    - {from: "config/site_configs/site_config_{SITE}.yaml", to: site_config.yaml}
+  hook: workflow/scripts/prepare_run.py
+  inputs:
+    sample_regex: '((R|D)[0-9]+-[0-9]+[A-Za-z0-9-]*)_'
+    create_input_files:
+      - -f
+      - -d
+      - "{FASTQ_DIR}/"
+      - -p
+      - MiSeq
+      # Miarka-launchern skickade --tc 1.0, Marvin-launchern inget (då saknar
+      # samples.tsv kolumnen tumor_content). Miarkas variant är den som körts
+      # end-to-end med v0.3.0-rc1.
+      - --tc
+      - "1.0"
+      - -a
+      - AGATCGGAAGAGCACACGTCTGAACTCCAGTCA,AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+      - -t
+      - R
+      - -s
+      - "{SAMPLE_REGEX}"
+      - -b
+      - NNNNNNNN
+    hook: true            # prepare_run.py inputs: rättar MiSeq-flowcell och // i units.tsv
+  snakemake:
+    configfiles: [config.yaml, site_config.yaml]
+    config:
+      PATH_TO_REPO: "{INSTALL_ROOT}"
+  runs:
+    - name: default
+  preflight: basic        # offline-preflight kräver ref_*-referensfiler, se STATUS.md
