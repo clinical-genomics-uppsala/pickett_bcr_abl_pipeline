@@ -20,7 +20,7 @@ modules:
   annotation: b25e8ea
   snv_indels: ebf6671
   prealignment: v1.2.0
-  fusions: v0.2.2
+  fusions: v0.1.0
   qc: 2c37a18
 
 reference:
