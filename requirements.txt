@@ -6,3 +6,4 @@ snakemake>=7.8.0,<8
 tabulate<0.9.0
 pulp<2.8
 smart_open<7.0.0
+xlsxwriter>=3.0.6

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sequenceSizes genomeName="integration">
+  <chromosome fileName="ref.fasta" contigName="chr1" totalBases="450" isCircular="false" md5="" ploidy="2" knownBases="450" />
+  <chromosome fileName="ref.fasta" contigName="chr2" totalBases="450" isCircular="false" md5="" ploidy="2" knownBases="450" />
+  <chromosome fileName="ref.fasta" contigName="chr9" totalBases="450" isCircular="false" md5="" ploidy="2" knownBases="450" />
+  <chromosome fileName="ref.fasta" contigName="chr22" totalBases="450" isCircular="false" md5="" ploidy="2" knownBases="450" />
+</sequenceSizes>

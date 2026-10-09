@@ -10,8 +10,6 @@ rule bcftools_reheader:
     output:
         vcf=temp("snv_indels/pisces/{sample}_{type}_{chr}.vcf"),
         samplename=temp("snv_indels/pisces/{sample}_{type}_{chr}.name.txt"),
-    params:
-        extra=config.get("bcftools_reheader", {}).get("extra", ""),
     log:
         "snv_indels/pisces/{sample}_{type}_{chr}.vcf.log",
     benchmark:
@@ -19,6 +17,8 @@ rule bcftools_reheader:
             "snv_indels/pisces/{sample}_{type}_{chr}.vcf.benchmark.tsv",
             config.get("bcftools_reheader", {}).get("benchmark_repeats", 1),
         )
+    container:
+        config.get("bcftools_reheader", {}).get("container", config["default_container"])
     threads: config.get("bcftools_reheader", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("bcftools_reheader", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -26,10 +26,12 @@ rule bcftools_reheader:
         partition=config.get("bcftools_reheader", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("bcftools_reheader", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("bcftools_reheader", {}).get("time", config["default_resources"]["time"]),
-    container:
-        config.get("bcftools_reheader", {}).get("container", config["default_container"])
+    params:
+        extra=config.get("bcftools_reheader", {}).get("extra", ""),
     message:
         "{rule}: Rename sample in snv_indels/pisces/{wildcards.sample}_{wildcards.type}_{wildcards.chr}.bad_name.vcf"
     shell:
         "echo {wildcards.sample}_{wildcards.type} > {output.samplename} && "
-        "(bcftools reheader -s {output.samplename} -o {output.vcf} {input.vcf} ) &> {log}"
+        "python3 -c 'import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().replace(bytes.fromhex(\"e2889e\"), b\"99999\"))' < {input.vcf} > {output.vcf}.tmp && "
+        "(bcftools reheader -s {output.samplename} -o {output.vcf} {output.vcf}.tmp ) &> {log} && "
+        "rm {output.vcf}.tmp"

@@ -66,22 +66,25 @@ for record in vcf.fetch():
     else:
         filter = ", ".join(list(record.filter))
 
-    if len(record.ref) != 1 or len(record.alts[0]) != 1:
+    alts = record.alts or ()
+    if len(record.ref) != 1 or not alts or any(len(alt) != 1 for alt in alts):
         bkg_median = "NA"
         bkg_nr_sd = "NA"
     else:
-        bkg_median = record.info["PanelMedian"]
-        bkg_nr_sd = record.info["PositionNrSD"]
+        bkg_median = record.info["PanelMedian"] if "PanelMedian" in record.info else "NA"
+        bkg_nr_sd = record.info["PositionNrSD"] if "PositionNrSD" in record.info else "NA"
+
+    sample_ad = record.samples[sample].get("AD") or ()
 
     outline = [
         sample,
         record.contig,
         str(record.pos),
         record.ref,
-        ";".join(record.alts),
+        ";".join(alts),
         ";".join(map(str, record.info["AF"])),
         str(record.info["DP"]),
-        ";".join(map(str, record.samples[sample].get("AD"))),
+        ";".join(map(str, sample_ad)),
         bkg_nr_sd,
         bkg_median,
         filter,
@@ -89,11 +92,11 @@ for record in vcf.fetch():
     allSNVs.append(outline)
 
     for b_line in branfordVariants:  # chr, pos, ref, alt, mutation, name
-        if record.contig == b_line[0] and record.pos == int(b_line[2]) and b_line[5] in record.alts:
+        if record.contig == b_line[0] and record.pos == int(b_line[2]) and b_line[5] in alts:
             dp = str(record.info["DP"])
-            index = list(record.alts).index(b_line[5])
+            index = list(alts).index(b_line[5])
             af = str(round(record.info["AF"][index], 3))
-            a_dp = str(record.samples[sample].get("AD")[index + 1])
+            a_dp = str(sample_ad[index + 1])
             outline = [b_line[6], b_line[3], b_line[0], str(b_line[2]), b_line[4], b_line[5], af, a_dp, dp]
             branfordSNV.append(outline)
             break
@@ -102,17 +105,16 @@ for record in vcf.fetch():
 for b_line in branfordVariants:
     ordered_b_line = [b_line[6], b_line[3], b_line[0], str(b_line[2]), b_line[4], b_line[5]]
     if ordered_b_line not in [outlines[0:6] for outlines in branfordSNV]:
-        branfordSNV.append(ordered_b_line + ["", "", str(depth_dict[ordered_b_line[1]])])
+        branfordSNV.append(ordered_b_line + ["", "", str(depth_dict.get(ordered_b_line[1], "NA"))])
 
-# Add background median for each bradford position
-i = 0
+# Add background median for each Branford position
 for bradford_line in branfordSNV:
+    background_median = "NA"
     for line in background_table:
-        if line[1] == bradford_line[3]:
+        if len(line) >= 3 and line[0] == bradford_line[2] and line[1] == bradford_line[3]:
             background_median = line[2]
             break
-    branfordSNV[i].append(background_median)
-    i += 1
+    bradford_line.append(background_median)
 
 # Add fusions from Arriba
 fusion_lines = []
@@ -144,7 +146,7 @@ with open(snakemake.input.arriba_tsv, "r") as tsv_arriba:
                 elif int(gene1_pos.split(":")[1]) >= 23629346 and int(gene1_pos.split(":")[1]) <= 23637342:
                     fusion_type = "Major"
                 elif int(gene1_pos.split(":")[1]) >= 23651611:
-                    fusion_type = " Micro"
+                    fusion_type = "Micro"
 
             outline = [
                 line[headerIndex.index("#gene1")],
@@ -192,7 +194,7 @@ worksheetOver.write_row(5, 0, emptyList, lineFormat)
 worksheetOver.write(6, 0, "Sheets:", tableHeadFormat)
 worksheetOver.write_url(7, 0, "internal:'Branford variants'!A1", string="Branford variants")
 worksheetOver.write_url(8, 0, "internal:'SNV variants'!A1", string="ABL1 variants")
-worksheetOver.write_url(9, 0, "internal:'Fusions'!A1", string="Fusions")
+worksheetOver.write_url(9, 0, "internal:'Fusion'!A1", string="Fusion")
 worksheetOver.write_row(11, 0, emptyList, lineFormat)
 
 worksheetOver.write(14, 0, "Branford list used: " + str(snakemake.input.branford))
@@ -243,4 +245,5 @@ for line in fusion_lines:
     worksheetFusion.write_row(row, col, line)
     row += 1
 
+workbook.set_size(1800, 1200)
 workbook.close()
