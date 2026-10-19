@@ -1,5 +1,10 @@
 decimalPoint_format: ","
 
+table_sample_merge:
+  "L00X": # to remove SX_L00X from ending to enable groupingq
+    - type: "regex"
+      pattern: "S[0-9]{1,2}_L00[0-8]{1}"
+
 custom_content:
   order:
     - fastqc
@@ -11,39 +16,40 @@ custom_content:
 
 table_columns_visible:
   FastQC:
-    percent_duplicates: False
-    percent_gc: False
-    avg_sequence_length: False
-    percent_fails: False
-    total_sequences: False
+    fastqc-percent_duplicates: False
+    fastqc-percent_gc: False
+    fastqc-avg_sequence_length: False
+    fastqc-percent_fails: False
+    fastqc-total_sequences: False
   fastp:
-    pct_adapter: True
-    pct_surviving: False
-    after_filtering_gc_content: False
-    filtering_result_passed_filter_reads: False
-    after_filtering_q30_bases: False
-    after_filtering_q30_rate: False
+    fastp-pct_adapter: True
+    fastp-pct_surviving: False
+    fastp-after_filtering_gc_content: False
+    fastp-filtering_result_passed_filter_reads: False
+    fastp-after_filtering_q30_bases: False
+    fastp-after_filtering_q30_rate: False
     pct_duplication: False
   mosdepth:
-    median_coverage: True
-    mean_coverage: False
-    1_x_pc: False
-    5_x_pc: False
-    10_x_pc: False
-    20_x_pc: False
-    30_x_pc: False
-    50_x_pc: False
-  Samtools:
-    error_rate: False
-    non-primary_alignments: False
-    reads_mapped: False
-    reads_mapped_percent: False
-    reads_properly_paired_percent: False
-    reads_MQ0_percent: False
-    raw_total_sequences: True
+    mosdepth-median_coverage: True
+    mosdepth-mean_coverage: False
+    mosdepth-1_x_pc: False
+    mosdepth-5_x_pc: False
+    mosdepth-10_x_pc: False
+    mosdepth-20_x_pc: False
+    mosdepth-30_x_pc: False
+    mosdepth-50_x_pc: False
+  "Samtools: stats":
+    samtools_stats-error_rate: False
+    samtools_stats-non-primary_alignments: False
+    samtools_stats-reads_mapped: False
+    samtools_stats-reads_mapped_percent: False
+    samtools_stats-reads_properly_paired_percent: False
+    samtools_stats-reads_MQ0_percent: False
+    samtools_stats-raw_total_sequences: True
   STAR:
-    uniquely_mapped_percent: True
-    uniquely_mapped: False
+    star-uniquely_mapped_percent: True
+    star-uniquely_mapped: False
+    star-mapped_percent: False
 
 # Patriks plug in, addera egna columner till general stats
 # multiqc_cgs:
@@ -80,7 +86,7 @@ table_columns_placement:
     after_filtering_q30_bases: 900
     after_filtering_q30_rate: 900
     pct_duplication: 900
-  Samtools:
+  "Samtools: stats":
     error_rate: 799
     non-primary_alignments: 750
     reads_mapped: 798
@@ -91,3 +97,18 @@ table_columns_placement:
   STAR:
     uniquely_mapped_percent: 801
     uniquely_mapped: 800
+
+custom_table_header_config:
+  general_stats_table:
+    mosdepth-median_coverage:
+      title: "Median Coverage [x]"
+      suffix: ""
+    samtools_stats-raw_total_sequences:
+      title: "Total seqs [M]"
+      suffix: ""
+    fastp-pct_adapter:
+      title: "Adapter [%]"
+      suffix: ""
+    star-uniquely_mapped_percent:
+      title: "Uniquely aligned [%]"
+      suffix: ""
