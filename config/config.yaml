@@ -72,7 +72,7 @@ mosdepth_bed:
   design_bed: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/branford_SNVs_230118.bed"
 
 multiqc:
-  container: "docker://hydragenetics/multiqc:1.11"
+  container: "docker://hydragenetics/multiqc:1.27.1"
   reports:
     RNA:
       config: "{{PATH_TO_REPO}}/pickett_bcr_abl_pipeline/config/multiqc_config_rna.yaml"
