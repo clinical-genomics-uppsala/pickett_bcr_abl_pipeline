@@ -93,7 +93,7 @@ mosdepth_bed:
 
 multiqc:
   path: pickett/multiqc_config_rna.yaml
-  checksum: 32d7bb22f5c1cec036c2b6885218839b
+  checksum: 6e96e24edcf695f93aaf0bed290d16fb
   type: file
   url: file:/projects/bin/wp2_abl/pickett_bcr_abl/v0.2.2/pickett_bcr_abl_pipeline/config/multiqc_config_rna.yaml
 

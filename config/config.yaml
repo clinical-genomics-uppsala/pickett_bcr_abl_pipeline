@@ -90,7 +90,7 @@ mosdepth_bed:
   design_bed: "{{ANNOTATIONS}}/branford_SNVs_230118.bed"
 
 multiqc:
-  container: '{{APPTAINER_CACHE}}/hydragenetics_multiqc_1.11.sif'
+  container: '{{APPTAINER_CACHE}}/hydragenetics_multiqc_1.27.1.sif'
   reports:
     RNA:
       config: "{{CONFIG_DIR}}/multiqc_config_rna.yaml"
