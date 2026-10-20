@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/compare/v0.2.2...v0.3.0) (2026-10-20)
+
+
+### Features
+
+* bump multiqc to 1.27.1 ([610e7ac](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/commit/610e7ac23891b0568966f2739f89622d874cbcfc))
+* bump multiqc to 1.27.1 ([610e7ac](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/commit/610e7ac23891b0568966f2739f89622d874cbcfc))
+* bump multiqc to 1.27.1 ([5b6c7e2](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/commit/5b6c7e2efa767f876e9a109c5b4b27d75520ac09))
+
+
+### Bug Fixes
+
+* there is no lane 0 ([e6474ce](https://github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/commit/e6474ce25ae29e6985b11eaf8c0a48e39d33409c))
+
 ### [0.2.2](https://www.github.com/clinical-genomics-uppsala/pickett_bcr_abl_pipeline/compare/v0.2.1...v0.2.2) (2024-08-23)
 
 
