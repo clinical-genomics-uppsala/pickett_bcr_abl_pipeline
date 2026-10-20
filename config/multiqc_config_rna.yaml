@@ -3,7 +3,7 @@ decimalPoint_format: ","
 table_sample_merge:
   "L00X": # to remove SX_L00X from ending to enable grouping
     - type: "regex"
-      pattern: "S[0-9]{1,2}_L00[0-8]{1}"
+      pattern: "S[0-9]{1,2}_L00[1-8]{1}"
 
 custom_content:
   order:
