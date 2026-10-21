@@ -16,6 +16,30 @@ properties:
     type: string
     description: name or path to a default docker/singularity container
 
+  modules:
+    type: object
+    description: versions/tags of the Hydra modules used by the pipeline
+    properties:
+      alignment:
+        type: string
+      annotation:
+        type: string
+      snv_indels:
+        type: string
+      prealignment:
+        type: string
+      fusions:
+        type: string
+      qc:
+        type: string
+    required:
+      - alignment
+      - annotation
+      - snv_indels
+      - prealignment
+      - fusions
+      - qc
+
   reference:
     type: object
     properties:
@@ -28,6 +52,9 @@ properties:
       fai: 
         type: string
         description: fasta reference genome_index
+      genomesize_xml:
+        type: string
+        description: GenomeSize.xml required by Pisces
       design_bed:
         type: string
         description: bedfile of capture design
@@ -42,6 +69,7 @@ properties:
     required:
      - fasta
      - fai
+     - genomesize_xml
      - design_bed
      - background
   
@@ -238,56 +266,57 @@ properties:
       - container
       - genome_index
   
-star_fusion:
-  type: object
-  properties:
-    container:
+  star_fusion:
+    type: object
+    properties:
+      container:
         type: string
         description: name or path to container containing the star fusion
-    genome_path:
-      type: string
-      description: path to genome build directory
-  required:
-    - container
-    - genome_path
+      genome_path:
+        type: string
+        description: path to genome build directory
+    required:
+      - container
+      - genome_path
 
-summary_report:
-  type: object
-  description: parameters for summary xlsx-report
-  properties:
-    branford: 
-      type: string
-      description: bedfile with branford positions
-  required:
-    - branford
+  summary_report:
+    type: object
+    description: parameters for summary xlsx-report
+    properties:
+      branford:
+        type: string
+        description: bedfile with branford positions
+    required:
+      - branford
 
-trimmer_software:
-  type: string
-  description: which fastq trimmer to use
+  trimmer_software:
+    type: string
+    description: which fastq trimmer to use
 
-vt_decompose:
-  type: object
-  properties:
-    container:
+  vt_decompose:
+    type: object
+    properties:
+      container:
         type: string
         description: name or path to container containing vt
-  required:
-    - container
+    required:
+      - container
 
-vt_normalize:
-  type: object
-  properties:
-    container:
+  vt_normalize:
+    type: object
+    properties:
+      container:
         type: string
         description: name or path to container containing vt
-  required:
-    - container
+    required:
+      - container
 
 required:
   - samples
   - units
   - resources
   - default_container
+  - modules
   - output
   - reference
   - arriba

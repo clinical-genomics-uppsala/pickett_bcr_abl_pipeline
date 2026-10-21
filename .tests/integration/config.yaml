@@ -35,3 +35,6 @@ star:
 star_fusion:
   genome_path: "references/"
 
+REFERENCE_DATA: references
+APPTAINER_CACHE: containers
+

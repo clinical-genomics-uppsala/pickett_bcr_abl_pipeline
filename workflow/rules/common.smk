@@ -13,6 +13,7 @@ from datetime import datetime
 from snakemake.utils import validate
 from snakemake.utils import min_version
 
+from hydra_genetics.utils.misc import get_module_snakefile
 from hydra_genetics.utils.misc import replace_dict_variables
 from hydra_genetics.utils.resources import load_resources
 from hydra_genetics.utils.samples import *
@@ -64,7 +65,7 @@ validate(samples, schema="../schemas/samples.schema.yaml")
 ### Read and validate units file
 
 units = (
-    pandas.read_table(config["units"], dtype=str)
+    pd.read_table(config["units"], dtype=str)
     .set_index(["sample", "type", "flowcell", "lane", "barcode"], drop=False)
     .sort_index()
 )

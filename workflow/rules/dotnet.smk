@@ -9,13 +9,12 @@ rule dotnet_pisces:
         bam="alignment/samtools_extract_reads/{sample}_{type}_{chr}.bam",
         bai="alignment/samtools_extract_reads/{sample}_{type}_{chr}.bam.bai",
         fasta=config.get("reference", {}).get("fasta", ""),
+        genomesize_xml=config["reference"]["genomesize_xml"],
         bed="snv_indels/bed_split/design_bedfile_{chr}.bed",
     output:
         vcf=temp("snv_indels/pisces/{sample}_{type}_{chr}_bad_name/{sample}_{type}_{chr}.vcf"),
         pisces_log=temp("snv_indels/pisces/{sample}_{type}_{chr}_bad_name/PiscesLogs/PiscesLog.txt"),
         pisces_options=temp("snv_indels/pisces/{sample}_{type}_{chr}_bad_name/PiscesLogs/PiscesOptions.used.json"),
-    params:
-        extra=config.get("dotnet_pisces", {}).get("extra", "--gvcf FALSE --filterduplicates TRUE"),
     log:
         "snv_indels/pisces/{sample}_{type}_{chr}.bad_name.vcf.log",
     benchmark:
@@ -23,6 +22,8 @@ rule dotnet_pisces:
             "snv_indels/pisces/{sample}_{type}_{chr}.bad_name.vcf.benchmark.tsv",
             config.get("dotnet_pisces", {}).get("benchmark_repeats", 1),
         )
+    container:
+        config.get("dotnet_pisces", {}).get("container", config["default_container"])
     threads: config.get("dotnet_pisces", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("dotnet_pisces", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
@@ -30,14 +31,15 @@ rule dotnet_pisces:
         partition=config.get("dotnet_pisces", {}).get("partition", config["default_resources"]["partition"]),
         threads=config.get("dotnet_pisces", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("dotnet_pisces", {}).get("time", config["default_resources"]["time"]),
-    container:
-        config.get("dotnet_pisces", {}).get("container", config["default_container"])
+    params:
+        extra=config.get("dotnet_pisces", {}).get("extra", "--gvcf FALSE --filterduplicates TRUE"),
     message:
         "{rule}: Call variants using Illumina Pisces on {input.bam}"
     shell:
         "REF_FOLDER=`dirname {input.fasta}` && "
         "OUTPUT_FOLDER=`dirname {output.vcf}` && "
-        "(dotnet /app/Pisces/Pisces.dll "
+        "(export LC_ALL=C && "
+        "dotnet /app/Pisces/Pisces.dll "
         "-b {input.bam} "
         "-g $REF_FOLDER "
         "-i {input.bed} "
